@@ -33,7 +33,7 @@ using System.Xml;
 namespace Microsoft.Samples.ReportingServices.CustomSecurity
 {
 
-    public class AuthenticationExtension : IAuthenticationExtension2, IExtension
+    public class AuthenticationExtension : IAuthenticationExtension, IExtension
     {
         /// <summary>
         /// You must implement SetConfiguration as required by IExtension
