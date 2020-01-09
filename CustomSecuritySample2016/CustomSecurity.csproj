@@ -314,7 +314,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="FormsAuth\rsreportserver.config" />
     <None Include="FormsAuth\rssrvpolicy.config" />
     <None Include="FormsAuth\web.config" />
     <None Include="packages.config" />
@@ -322,7 +321,11 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="ReportingServicesService.exe.config" />
+    <None Include="ReportingServicesService.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ReportingServicesService.exe.config.bak" />
+    <None Include="FormsAuth\rsreportserver.config" />
     <None Include="Setup\RestoreDatabase.sql" />
     <None Include="Web References\localhost\ActiveState.datasource">
       <DependentUpon>Reference.map</DependentUpon>
