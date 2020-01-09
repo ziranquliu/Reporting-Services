@@ -50,8 +50,8 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <OutputPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
@@ -71,6 +71,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -96,6 +97,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportingServices.Interfaces">
       <HintPath>D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\Microsoft.ReportingServices.Interfaces.dll</HintPath>
     </Reference>
@@ -113,6 +115,7 @@
       <Name>System.Drawing</Name>
     </Reference>
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Management">
       <Name>System.Management</Name>
     </Reference>
@@ -141,27 +144,144 @@
     <Compile Include="Authorization.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CatalogItemExt.cs" />
     <Compile Include="CustomSecurity.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CustomSecurity.resx</DependentUpon>
     </Compile>
+    <Compile Include="HomePage.aspx.cs">
+      <DependentUpon>HomePage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HomePage.aspx.designer.cs">
+      <DependentUpon>HomePage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Logon.aspx.cs">
       <DependentUpon>Logon.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="RedisHelper.cs" />
     <Compile Include="ReportingService2010.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="StackExchange\Redis\Aggregate.cs" />
+    <Compile Include="StackExchange\Redis\Bitwise.cs" />
+    <Compile Include="StackExchange\Redis\ClientFlags.cs" />
+    <Compile Include="StackExchange\Redis\ClientInfo.cs" />
+    <Compile Include="StackExchange\Redis\ClientType.cs" />
+    <Compile Include="StackExchange\Redis\ClusterConfiguration.cs" />
+    <Compile Include="StackExchange\Redis\CommandFlags.cs" />
+    <Compile Include="StackExchange\Redis\CommandMap.cs" />
+    <Compile Include="StackExchange\Redis\CommandStatus.cs" />
+    <Compile Include="StackExchange\Redis\CommandTrace.cs" />
+    <Compile Include="StackExchange\Redis\Compat\ConvertHelper.cs" />
+    <Compile Include="StackExchange\Redis\Compat\VolatileWrapper.cs" />
+    <Compile Include="StackExchange\Redis\CompletedDefaultTask.cs" />
+    <Compile Include="StackExchange\Redis\CompletionManager.cs" />
+    <Compile Include="StackExchange\Redis\ConcurrentProfileStorageCollection.cs" />
+    <Compile Include="StackExchange\Redis\Condition.cs" />
+    <Compile Include="StackExchange\Redis\ConfigurationOptions.cs" />
+    <Compile Include="StackExchange\Redis\ConnectionCounters.cs" />
+    <Compile Include="StackExchange\Redis\ConnectionFailedEventArgs.cs" />
+    <Compile Include="StackExchange\Redis\ConnectionFailureType.cs" />
+    <Compile Include="StackExchange\Redis\ConnectionMultiplexer.cs" />
+    <Compile Include="StackExchange\Redis\ConnectionMultiplexer.Profiling.cs" />
+    <Compile Include="StackExchange\Redis\ConnectionMultiplexer.ReaderWriter.cs" />
+    <Compile Include="StackExchange\Redis\ConnectionType.cs" />
+    <Compile Include="StackExchange\Redis\DebuggingAids.cs" />
+    <Compile Include="StackExchange\Redis\EndPointCollection.cs" />
+    <Compile Include="StackExchange\Redis\EndPointEventArgs.cs" />
+    <Compile Include="StackExchange\Redis\ExceptionFactory.cs" />
+    <Compile Include="StackExchange\Redis\Exclude.cs" />
+    <Compile Include="StackExchange\Redis\ExponentialRetry.cs" />
+    <Compile Include="StackExchange\Redis\ExportOptions.cs" />
+    <Compile Include="StackExchange\Redis\ExtensionMethods.cs" />
+    <Compile Include="StackExchange\Redis\Format.cs" />
+    <Compile Include="StackExchange\Redis\GeoEntry.cs" />
+    <Compile Include="StackExchange\Redis\GeoUnit.cs" />
+    <Compile Include="StackExchange\Redis\HashEntry.cs" />
+    <Compile Include="StackExchange\Redis\HashSlotMovedEventArgs.cs" />
+    <Compile Include="StackExchange\Redis\IBatch.cs" />
+    <Compile Include="StackExchange\Redis\ICompletable.cs" />
+    <Compile Include="StackExchange\Redis\IConnectionMultiplexer.cs" />
+    <Compile Include="StackExchange\Redis\IDatabase.cs" />
+    <Compile Include="StackExchange\Redis\IDatabaseAsync.cs" />
+    <Compile Include="StackExchange\Redis\IMultiMessage.cs" />
+    <Compile Include="StackExchange\Redis\InternalErrorEventArgs.cs" />
+    <Compile Include="StackExchange\Redis\IProfiler.cs" />
+    <Compile Include="StackExchange\Redis\IReconnectRetryPolicy.cs" />
+    <Compile Include="StackExchange\Redis\IRedis.cs" />
+    <Compile Include="StackExchange\Redis\IRedisAsync.cs" />
+    <Compile Include="StackExchange\Redis\IServer.cs" />
+    <Compile Include="StackExchange\Redis\ISubscriber.cs" />
+    <Compile Include="StackExchange\Redis\ITransaction.cs" />
+    <Compile Include="StackExchange\Redis\KeyspaceIsolation\BatchWrapper.cs" />
+    <Compile Include="StackExchange\Redis\KeyspaceIsolation\DatabaseExtension.cs" />
+    <Compile Include="StackExchange\Redis\KeyspaceIsolation\DatabaseWrapper.cs" />
+    <Compile Include="StackExchange\Redis\KeyspaceIsolation\TransactionWrapper.cs" />
+    <Compile Include="StackExchange\Redis\KeyspaceIsolation\WrapperBase.cs" />
+    <Compile Include="StackExchange\Redis\LinearRetry.cs" />
+    <Compile Include="StackExchange\Redis\LoggingTextStream.cs" />
+    <Compile Include="StackExchange\Redis\LuaScript.cs" />
+    <Compile Include="StackExchange\Redis\Message.cs" />
+    <Compile Include="StackExchange\Redis\MessageCompletable.cs" />
+    <Compile Include="StackExchange\Redis\MessageQueue.cs" />
+    <Compile Include="StackExchange\Redis\MigrateOptions.cs" />
+    <Compile Include="StackExchange\Redis\Order.cs" />
+    <Compile Include="StackExchange\Redis\PhysicalBridge.cs" />
+    <Compile Include="StackExchange\Redis\PhysicalConnection.cs" />
+    <Compile Include="StackExchange\Redis\ProfileContextTracker.cs" />
+    <Compile Include="StackExchange\Redis\ProfileStorage.cs" />
+    <Compile Include="StackExchange\Redis\RawResult.cs" />
+    <Compile Include="StackExchange\Redis\RedisBase.cs" />
+    <Compile Include="StackExchange\Redis\RedisBatch.cs" />
+    <Compile Include="StackExchange\Redis\RedisChannel.cs" />
+    <Compile Include="StackExchange\Redis\RedisCommand.cs" />
+    <Compile Include="StackExchange\Redis\RedisDatabase.cs" />
+    <Compile Include="StackExchange\Redis\RedisErrorEventArgs.cs" />
+    <Compile Include="StackExchange\Redis\RedisFeatures.cs" />
+    <Compile Include="StackExchange\Redis\RedisKey.cs" />
+    <Compile Include="StackExchange\Redis\RedisLiterals.cs" />
+    <Compile Include="StackExchange\Redis\RedisResult.cs" />
+    <Compile Include="StackExchange\Redis\RedisServer.cs" />
+    <Compile Include="StackExchange\Redis\RedisSubscriber.cs" />
+    <Compile Include="StackExchange\Redis\RedisTransaction.cs" />
+    <Compile Include="StackExchange\Redis\RedisType.cs" />
+    <Compile Include="StackExchange\Redis\RedisValue.cs" />
+    <Compile Include="StackExchange\Redis\ReplicationChangeOptions.cs" />
+    <Compile Include="StackExchange\Redis\ResultBox.cs" />
+    <Compile Include="StackExchange\Redis\ResultProcessor.cs" />
+    <Compile Include="StackExchange\Redis\ResultType.cs" />
+    <Compile Include="StackExchange\Redis\SaveType.cs" />
+    <Compile Include="StackExchange\Redis\ScriptParameterMapper.cs" />
+    <Compile Include="StackExchange\Redis\ServerCounters.cs" />
+    <Compile Include="StackExchange\Redis\ServerEndPoint.cs" />
+    <Compile Include="StackExchange\Redis\ServerSelectionStrategy.cs" />
+    <Compile Include="StackExchange\Redis\ServerType.cs" />
+    <Compile Include="StackExchange\Redis\SetOperation.cs" />
+    <Compile Include="StackExchange\Redis\ShutdownMode.cs" />
+    <Compile Include="StackExchange\Redis\SocketManager.cs" />
+    <Compile Include="StackExchange\Redis\SocketManager.NoPoll.cs" />
+    <Compile Include="StackExchange\Redis\SocketManager.Poll.cs" />
+    <Compile Include="StackExchange\Redis\SortedSetEntry.cs" />
+    <Compile Include="StackExchange\Redis\SortType.cs" />
+    <Compile Include="StackExchange\Redis\StringSplits.cs" />
+    <Compile Include="StackExchange\Redis\TaskSource.cs" />
+    <Compile Include="StackExchange\Redis\When.cs" />
     <Compile Include="Web References\localhost\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Content Include="HomePage.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="Setup\CreateUserStore.sql" />
     <Content Include="Logon.aspx">
       <SubType>ASPXCodeBehind</SubType>

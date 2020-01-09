@@ -14,6 +14,8 @@
             Width="96px" Font-Size="X-Small" Font-Names="Verdana" Font-Bold="True" meta:resourcekey="LblUserResource1">User Name:</asp:Label>
          <asp:Button id="BtnLogon" style="Z-INDEX: 106; LEFT: 352px; POSITION: absolute; TOP: 224px"
             runat="server" Width="104px" Text="Logon" tabIndex="3" meta:resourcekey="BtnLogonResource1"></asp:Button>
+          <asp:Button id="BtnAdminLogin" style="Z-INDEX: 106; LEFT: 281px; POSITION: absolute; TOP: 264px; width: 134px;"
+            runat="server" Text="AdminLogon" tabIndex="3" meta:resourcekey="BtnLogonResource1" OnClick="BtnAdminLogin_Click"></asp:Button>
          <asp:TextBox id="TxtPwd" style="Z-INDEX: 103; LEFT: 296px; POSITION: absolute; TOP: 184px" runat="server"
             tabIndex="2" Width="160px" TextMode="Password" meta:resourcekey="TxtPwdResource1"></asp:TextBox>
          <asp:Label id="LblPwd" style="Z-INDEX: 102; LEFT: 176px; POSITION: absolute; TOP: 192px" runat="server"
