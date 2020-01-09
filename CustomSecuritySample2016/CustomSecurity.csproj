@@ -322,6 +322,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="ReportingServicesService.exe.config" />
     <None Include="Setup\RestoreDatabase.sql" />
     <None Include="Web References\localhost\ActiveState.datasource">
       <DependentUpon>Reference.map</DependentUpon>
