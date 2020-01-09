@@ -1,5 +1,4 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="HomePage.aspx.cs" Inherits="Microsoft.Samples.ReportingServices.CustomSecurity.HomePage" %>
-<%@ Import Namespace="Microsoft.Samples.ReportingServices.CustomSecurity" %>
 
 <!DOCTYPE html>
 

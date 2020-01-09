@@ -69,23 +69,19 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             this.BtnLogon.Click += new System.EventHandler(this.ServerBtnLogon_Click);
             this.BtnRegister.Click += new System.EventHandler(this.BtnRegister_Click);
             this.Load += new System.EventHandler(this.Page_Load);
-
         }
         #endregion
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private void BtnRegister_Click(object sender,
-          System.EventArgs e)
+        private void BtnRegister_Click(object sender, System.EventArgs e)
         {
             string salt = AuthenticationUtilities.CreateSalt(5);
-            string passwordHash =
-               AuthenticationUtilities.CreatePasswordHash(TxtPwd.Text, salt);
+            string passwordHash = AuthenticationUtilities.CreatePasswordHash(TxtPwd.Text, salt);
             if (AuthenticationUtilities.ValidateUserName(TxtUser.Text))
             {
                 try
                 {
-                    AuthenticationUtilities.StoreAccountDetails(
-                       TxtUser.Text, passwordHash, salt);
+                    AuthenticationUtilities.StoreAccountDetails(TxtUser.Text, passwordHash, salt);
                 }
                 catch (Exception ex)
                 {
@@ -94,25 +90,24 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
             else
             {
-
-                lblMessage.Text = string.Format(CultureInfo.InvariantCulture,
-                    Logon_aspx.UserNameError);
+                lblMessage.Text = string.Format(CultureInfo.InvariantCulture, Logon_aspx.UserNameError);
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private void ServerBtnLogon_Click(object sender,
-          System.EventArgs e)
+        private void ServerBtnLogon_Click(object sender, System.EventArgs e)
         {
             bool passwordVerified = false;
             try
             {
-                passwordVerified =
-                   AuthenticationUtilities.VerifyPassword(TxtUser.Text, TxtPwd.Text);
+                passwordVerified = AuthenticationUtilities.VerifyPassword(TxtUser.Text, TxtPwd.Text);
                 if (passwordVerified)
                 {
-                    FormsAuthentication.RedirectFromLoginPage(
-                       TxtUser.Text, false);
+                    RedisHelper.Set("TxtUser", TxtUser.Text, 30);
+                    RedisHelper.Set("TxtPwd", TxtPwd.Text, 30);
+                    FormsAuthentication.SetAuthCookie(TxtUser.Text, false);
+                    Response.Redirect("HomePage.aspx", false);
+                    //FormsAuthentication.RedirectFromLoginPage(TxtUser.Text, false);
                 }
                 else
                 {
@@ -132,31 +127,29 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                 // object for .NET authorization purposes
                 // For details, see "How To: Use Forms authentication with 
                 // GenericPrincipal objects
-                lblMessage.Text = string.Format(CultureInfo.InvariantCulture,
-                   Logon_aspx.LoginSuccess);
+                lblMessage.Text = string.Format(CultureInfo.InvariantCulture, Logon_aspx.LoginSuccess);
                 BtnRegister.Enabled = false;
             }
             else
             {
-                lblMessage.Text = string.Format(CultureInfo.InvariantCulture,
-                  Logon_aspx.InvalidUsernamePassword);
+                lblMessage.Text = string.Format(CultureInfo.InvariantCulture, Logon_aspx.InvalidUsernamePassword);
             }
         }
-        protected void BtnAdminLogin_Click(object sender, EventArgs e)
-        {
-            TxtUser.Text = "ruifeng.chang";
-            TxtPwd.Text = "chang@20200106";
-            try
-            {
-                ReportingService2010 service2010 = new ReportingService2010();
-                service2010.Credentials = new NetworkCredential(TxtUser.Text, TxtPwd.Text, "Geely");
-                RedisHelper.Set("TxtUser", TxtUser.Text, 30);
-                RedisHelper.Set("TxtPwd", TxtPwd.Text, 30);
-                FormsAuthentication.SetAuthCookie(TxtUser.Text, false);
-                Response.Redirect("HomePage.aspx", false);
-            }
-            catch (Exception ex) { throw ex; }
-            finally { }
-        }
+        //protected void BtnAdminLogin_Click(object sender, EventArgs e)
+        //{
+        //    TxtUser.Text = "ruifeng.chang";
+        //    TxtPwd.Text = "";
+        //    try
+        //    {
+        //        ReportingService2010 service2010 = new ReportingService2010();
+        //        service2010.Credentials = new NetworkCredential(TxtUser.Text, TxtPwd.Text, "Geely");
+        //        RedisHelper.Set("TxtUser", TxtUser.Text, 30);
+        //        RedisHelper.Set("TxtPwd", TxtPwd.Text, 30);
+        //        FormsAuthentication.SetAuthCookie(TxtUser.Text, false);
+        //        Response.Redirect("HomePage.aspx", false);
+        //    }
+        //    catch (Exception ex) { throw ex; }
+        //    finally { }
+        //}
     }
 }
