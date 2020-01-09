@@ -314,6 +314,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="FormsAuth\rsreportserver.config" />
+    <None Include="FormsAuth\rssrvpolicy.config" />
+    <None Include="FormsAuth\web.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -418,6 +421,9 @@
     <None Include="Web References\localhost\Warning.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="WindowsAuth\rsreportserver.config" />
+    <None Include="WindowsAuth\rssrvpolicy.config" />
+    <None Include="WindowsAuth\web.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
