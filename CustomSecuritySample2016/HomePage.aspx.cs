@@ -150,120 +150,120 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
         }
 
-        protected void btnAddFolder_Click(object sender, EventArgs e)
-        {
-            CatalogItem ItemInfo = null;
-            Service2010.CreateFolder(this.tbFolder.Text.Trim('/', '\\'), "/", null, out ItemInfo);
-        }
+        //protected void btnAddFolder_Click(object sender, EventArgs e)
+        //{
+        //    CatalogItem ItemInfo = null;
+        //    Service2010.CreateFolder(this.tbFolder.Text.Trim('/', '\\'), "/", null, out ItemInfo);
+        //}
 
-        protected void btnDelFolder_Click(object sender, EventArgs e)
-        {
-            Service2010.DeleteItem("/" + this.tbFolder.Text.Trim('/', '\\'));
-        }
+        //protected void btnDelFolder_Click(object sender, EventArgs e)
+        //{
+        //    Service2010.DeleteItem("/" + this.tbFolder.Text.Trim('/', '\\'));
+        //}
 
-        public string GetSecurityScopes()
-        {
-            return String.Join(",", Service2010.ListSecurityScopes());
-        }
-        public string GetModelItemTypes()
-        {
-            return String.Join(",", Service2010.ListModelItemTypes());
-        }
-        public string GetItemTypes()
-        {
-            return String.Join(",", Service2010.ListItemTypes());
-        }
-        public string GetServerConfigInfo()
-        {
-            string ServerConfigInfo = null;
-            //try
-            //{
-            //    Service2010.GetReportServerConfigInfo(true, out ServerConfigInfo);
-            //}
-            //catch (Exception ex)
-            //{
-            //    logger.ErrorEx(ex);
-            //}
-            return ServerConfigInfo;
-        }
-        public List<CatalogItem> GetCatalog()
-        {
-            CatalogItem[] CatalogItems = new CatalogItem[0];
-            try
-            {
-                Service2010.ListChildren("/", true, out CatalogItems);
-            }
-            catch (Exception ex)
-            {
-                logger.ErrorEx(ex);
-            }
-            return CatalogItems.ToList();
-        }
+        //public string GetSecurityScopes()
+        //{
+        //    return String.Join(",", Service2010.ListSecurityScopes());
+        //}
+        //public string GetModelItemTypes()
+        //{
+        //    return String.Join(",", Service2010.ListModelItemTypes());
+        //}
+        //public string GetItemTypes()
+        //{
+        //    return String.Join(",", Service2010.ListItemTypes());
+        //}
+        //public string GetServerConfigInfo()
+        //{
+        //    string ServerConfigInfo = null;
+        //    //try
+        //    //{
+        //    //    Service2010.GetReportServerConfigInfo(true, out ServerConfigInfo);
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    logger.ErrorEx(ex);
+        //    //}
+        //    return ServerConfigInfo;
+        //}
+        //public List<CatalogItem> GetCatalog()
+        //{
+        //    CatalogItem[] CatalogItems = new CatalogItem[0];
+        //    try
+        //    {
+        //        Service2010.ListChildren("/", true, out CatalogItems);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger.ErrorEx(ex);
+        //    }
+        //    return CatalogItems.ToList();
+        //}
 
-        protected void btnUpFile_Click(object sender, EventArgs e)
-        {
-            if (this.upFile.HasFile)
-            {
-                FileInfo fileInfo = new FileInfo(this.upFile.PostedFile.FileName);
-                string itemtype = "";
-                if (fileInfo.Extension == ".pbix")
-                {
-                    itemtype = CatalogItemTypeEnum.Report.ToString();
-                }
-                if (fileInfo.Extension == ".rdl")
-                {
-                    itemtype = CatalogItemTypeEnum.Report.ToString();
-                }
-                if (itemtype.Length > 0)
-                {
-                    try
-                    {
-                        CatalogItem catalogItem = null;
-                        byte[] definition = null;
-                        Warning[] warns = null;
+        //protected void btnUpFile_Click(object sender, EventArgs e)
+        //{
+        //    if (this.upFile.HasFile)
+        //    {
+        //        FileInfo fileInfo = new FileInfo(this.upFile.PostedFile.FileName);
+        //        string itemtype = "";
+        //        if (fileInfo.Extension == ".pbix")
+        //        {
+        //            itemtype = CatalogItemTypeEnum.Report.ToString();
+        //        }
+        //        if (fileInfo.Extension == ".rdl")
+        //        {
+        //            itemtype = CatalogItemTypeEnum.Report.ToString();
+        //        }
+        //        if (itemtype.Length > 0)
+        //        {
+        //            try
+        //            {
+        //                CatalogItem catalogItem = null;
+        //                byte[] definition = null;
+        //                Warning[] warns = null;
                         
-                        try
-                        {
-                            Stream stream = this.upFile.PostedFile.InputStream;
-                            definition = new byte[stream.Length];
-                            stream.Read(definition, 0, (int)stream.Length);
-                            stream.Close();
-                        }
-                        catch (IOException ex)
-                        {
-                            logger.ErrorEx(ex);
-                        }
-                        string parent = this.tbFolder.Text.Trim();
-                        if (string.IsNullOrEmpty(parent))
-                        {
-                            parent = "/";
-                        }
-                        else
-                        {
-                            if (!parent.StartsWith("/"))
-                            {
-                                parent = "/" + parent;
-                            }
-                        }
-                        Service2010.CreateCatalogItem(
-                            itemtype,
-                            fileInfo.Name,
-                            parent,
-                            true, definition, null, out catalogItem, out warns
-                            );
-                        logger.WarnEx(warns);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.ErrorEx(ex);
-                    }
-                }
-            }
-        }
+        //                try
+        //                {
+        //                    Stream stream = this.upFile.PostedFile.InputStream;
+        //                    definition = new byte[stream.Length];
+        //                    stream.Read(definition, 0, (int)stream.Length);
+        //                    stream.Close();
+        //                }
+        //                catch (IOException ex)
+        //                {
+        //                    logger.ErrorEx(ex);
+        //                }
+        //                string parent = this.tbFolder.Text.Trim();
+        //                if (string.IsNullOrEmpty(parent))
+        //                {
+        //                    parent = "/";
+        //                }
+        //                else
+        //                {
+        //                    if (!parent.StartsWith("/"))
+        //                    {
+        //                        parent = "/" + parent;
+        //                    }
+        //                }
+        //                Service2010.CreateCatalogItem(
+        //                    itemtype,
+        //                    fileInfo.Name,
+        //                    parent,
+        //                    true, definition, null, out catalogItem, out warns
+        //                    );
+        //                logger.WarnEx(warns);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                logger.ErrorEx(ex);
+        //            }
+        //        }
+        //    }
+        //}
 
-        protected void btnDelFile_Click(object sender, EventArgs e)
-        {
+        //protected void btnDelFile_Click(object sender, EventArgs e)
+        //{
 
-        }
+        //}
     }
 }
