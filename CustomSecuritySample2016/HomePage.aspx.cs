@@ -43,23 +43,39 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                     SSOAccessToken token = GetAccessToken(Request);
                     if (token != null)
                     {
-                        //SessionInfo sessionInfo = new SessionInfo(token, getUserInfo(token));
+                        SessionUser sessionUser = GetUserInfo(token);
+                        SessionInfo sessionInfo = new SessionInfo(token, sessionUser);
                         //获取当前用户的权限编码列表
-                        List<string> codes = GetCurrentPrivileges(token.AccessToken);
-                        //sessionInfo.getSessionUser().setUserPermissionCode(codes);
-                        //List<UserPermission> list = getUserPermission((Privilege)session.getServletContext().getAttribute("privilege"), codes);
-                        //sessionInfo.getSessionUser().setUserPermission(list);
-                        //session.setAttribute(SESSION_INFO, sessionInfo);
-                        FormsAuthentication.SetAuthCookie(token.OpenId, false);
+                        //List<string> codes = GetCurrentPrivileges(token.AccessToken);
+                        RedisHelper.Set(Consts.SESSION_INFO, sessionInfo);
+
+                        FormsAuthentication.SetAuthCookie(String.Format("{0}", sessionUser.UserDisplayName), false);
                     }
                 }
             }
         }
-        //private SessionUser getUserInfo(AccessToken token)
-        //{
-        //    String accountId = token.getOpenId();
-        //    return mdmEmployeeMapper.selectSessionUser(Long.valueOf(accountId));
-        //}
+        private SessionUser GetUserInfo(SSOAccessToken token)
+        {
+            string accountId = token.OpenId;
+            string sql = String.Format(@"SELECT 
+                            ME.AccountId,
+                            ME.UserId,
+							UA.DisplayName AS UserDisplayName,
+							UA.Email,
+							UA.Mobile,
+                            MD.Id AS DealerId,
+                            SO.DealerCode,
+							MD.ShortName,
+							MD.FullName,
+                            SO.Id AS OrgId,
+                            SO.Name AS OrgName
+                        FROM MdmEmployee ME
+                        LEFT JOIN SysOrg SO ON ME.OrgId = SO.Id
+                        LEFT JOIN MdmDealer MD ON MD.DealerCode = SO.DealerCode
+						LEFT JOIN UsAccount UA ON UA.Id=ME.AccountId
+                        WHERE ME.AccountId = '{0}'", long.Parse(accountId));
+            return DatatableToEntity<SessionUser>.FillModel(SqlHelper.ExecuteDataTable(sql)).FirstOrDefault();
+        }
         private List<string> GetCurrentPrivileges(string accessToken)
         {
             try

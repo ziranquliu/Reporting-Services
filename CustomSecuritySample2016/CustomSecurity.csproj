@@ -133,7 +133,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Consts.cs" />
+    <Compile Include="DatatableToEntity.cs" />
     <Compile Include="HttpUtils.cs" />
+    <Compile Include="LoadPBI.aspx.cs">
+      <DependentUpon>LoadPBI.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoadPBI.aspx.designer.cs">
+      <DependentUpon>LoadPBI.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SessionInfo.cs" />
+    <Compile Include="SessionUser.cs" />
+    <Compile Include="SqlHelper.cs" />
     <Compile Include="SSOAccessToken.cs" />
     <Compile Include="App_LocalResources\Logon.aspx.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -284,7 +295,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Content Include="css\app-443dcad0-751c-4017-ab6c-ae6cac983fd6.css" />
+    <Content Include="css\brand.css" />
+    <Content Include="css\lib-443dcad0-751c-4017-ab6c-ae6cac983fd6.css" />
     <Content Include="HomePage.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="js\app-443dcad0-751c-4017-ab6c-ae6cac983fd6.js" />
+    <Content Include="js\jquery-2.2.2.min.js" />
+    <Content Include="js\powerbiportal.common.bundle.js" />
+    <Content Include="LoadPBI.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
     <Content Include="Setup\CreateUserStore.sql" />
