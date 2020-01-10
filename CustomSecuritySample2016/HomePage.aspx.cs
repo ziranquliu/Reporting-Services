@@ -24,6 +24,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         private string automaker_domain = ConfigurationManager.AppSettings["automaker_domain"];
         private string homepage = ConfigurationManager.AppSettings["homepage"];
         protected ReportingService2010 Service2010 = new ReportingService2010();
+        private string securitycode = "";
 
         private void Page_Load(object sender, System.EventArgs e)
         {
@@ -32,8 +33,8 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (!IsPostBack)
             {
                 string sessionId = "";
-                string code = RedisHelper.Exists(session_code) ? RedisHelper.Get<string>(session_code) : Request["code"];
-                if (null == code || code.Length == 0)
+                securitycode = RedisHelper.Exists(session_code) ? RedisHelper.Get<string>(session_code) : Request["code"];
+                if (null == securitycode || securitycode.Length == 0)
                 {
                     //跳转到登录页
                     Response.Redirect(
@@ -52,8 +53,14 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                         SessionInfo sessionInfo = new SessionInfo(token, sessionUser);
                         //获取当前用户的权限编码列表
                         //List<string> codes = GetCurrentPrivileges(token.AccessToken);
-                        RedisHelper.Set(session_info, sessionInfo);
-                        RedisHelper.Set(session_code, code);
+                        if (!RedisHelper.Exists(session_info))
+                        {
+                            RedisHelper.Set(session_info, sessionInfo);
+                        }
+                        if (!RedisHelper.Exists(session_code))
+                        {
+                            RedisHelper.Set(session_code, securitycode);
+                        }
 
                         FormsAuthentication.SetAuthCookie(String.Format("{0}", sessionUser.UserDisplayName), false);
                     }
@@ -102,7 +109,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             Dictionary<string, string> paramsMap = new Dictionary<string, string>();
             paramsMap.Add("client_id", clientId);
             paramsMap.Add("client_secret", clientSecret);
-            paramsMap.Add("code", Request["code"]);
+            paramsMap.Add("code", securitycode);
             paramsMap.Add("grant_type", "authorization_code");
             paramsMap.Add("redirect_uri", HttpUtility.UrlEncode(homepage, Encoding.UTF8));
 
@@ -139,12 +146,12 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         protected void btnAddFolder_Click(object sender, EventArgs e)
         {
             CatalogItem ItemInfo = null;
-            Service2010.CreateFolder(this.tb.Text.Trim(), "/", null, out ItemInfo);
+            Service2010.CreateFolder(this.tb.Text.Trim('/', '\\'), "/", null, out ItemInfo);
         }
 
         protected void btnDelFolder_Click(object sender, EventArgs e)
         {
-            Service2010.DeleteItem(this.tb.Text.Trim());
+            Service2010.DeleteItem("/" + this.tb.Text.Trim('/', '\\'));
         }
 
         public string GetSecurityScopes()
