@@ -50,7 +50,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -107,6 +107,10 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="ReportingServicesWebServer, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\ReportingServicesWebServer.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -138,6 +142,7 @@
     <Compile Include="HttpUtils.cs" />
     <Compile Include="LoadPBI.aspx.cs">
       <DependentUpon>LoadPBI.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="LoadPBI.aspx.designer.cs">
       <DependentUpon>LoadPBI.aspx.cs</DependentUpon>
@@ -298,6 +303,8 @@
     <Content Include="css\app-443dcad0-751c-4017-ab6c-ae6cac983fd6.css" />
     <Content Include="css\brand.css" />
     <Content Include="css\lib-443dcad0-751c-4017-ab6c-ae6cac983fd6.css" />
+    <Content Include="dlls\Microsoft.ReportingServices.Interfaces.dll" />
+    <Content Include="dlls\ReportingServicesWebServer.dll" />
     <Content Include="HomePage.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
