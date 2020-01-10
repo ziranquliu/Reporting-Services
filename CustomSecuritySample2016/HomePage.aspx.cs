@@ -29,12 +29,14 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         protected ReportingService2010 Service2010 = new ReportingService2010();
         private string securitycode = "";
         private Logger logger;
+        private string session_info;
+        private string session_code;
 
         private void Page_Load(object sender, System.EventArgs e)
         {
             logger = LogManager.GetCurrentClassLogger(typeof(HomePage));
-            string session_info = string.Format("{0}_{1}", Consts.SESSION_INFO, Session.SessionID);
-            string session_code = string.Format("{0}_{1}", Consts.SESSION_CODE, Session.SessionID);
+            session_info = string.Format("{0}_{1}", Consts.SESSION_INFO, Session.SessionID);
+            session_code = string.Format("{0}_{1}", Consts.SESSION_CODE, Session.SessionID);
             if (!IsPostBack)
             {
                 string sessionId = "";
@@ -150,16 +152,25 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
         }
 
-        //protected void btnAddFolder_Click(object sender, EventArgs e)
-        //{
-        //    CatalogItem ItemInfo = null;
-        //    Service2010.CreateFolder(this.tbFolder.Text.Trim('/', '\\'), "/", null, out ItemInfo);
-        //}
+        protected void btnAddFolder_Click(object sender, EventArgs e)
+        {
+            CatalogItem ItemInfo = null;
+            Service2010.CreateFolder(this.tbFolder.Text.Trim('/', '\\'), "/", null, out ItemInfo);
+        }
 
-        //protected void btnDelFolder_Click(object sender, EventArgs e)
-        //{
-        //    Service2010.DeleteItem("/" + this.tbFolder.Text.Trim('/', '\\'));
-        //}
+        protected void btnDelFolder_Click(object sender, EventArgs e)
+        {
+            Service2010.DeleteItem("/" + this.tbFolder.Text.Trim('/', '\\'));
+        }
+
+        protected void btnExit_Click(object sender, EventArgs e)
+        {
+            RedisHelper.Remove(session_code);
+            RedisHelper.Remove(session_info);
+            FormsAuthentication.SignOut();
+            string result = HttpUtils.Get(domain + "/logout?redirect_login=true");
+            Response.Redirect(domain + "/ent/login", true);
+        }
 
         //public string GetSecurityScopes()
         //{
@@ -221,7 +232,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         //                CatalogItem catalogItem = null;
         //                byte[] definition = null;
         //                Warning[] warns = null;
-                        
+
         //                try
         //                {
         //                    Stream stream = this.upFile.PostedFile.InputStream;
