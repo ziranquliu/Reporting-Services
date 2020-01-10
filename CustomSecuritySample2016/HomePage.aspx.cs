@@ -1,6 +1,8 @@
-﻿using Microsoft.Samples.ReportingServices.CustomSecurity.localhost;
+﻿using Microsoft.ReportingServices.Library.Soap2010;
+using Microsoft.ReportingServices.WebServer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,13 +23,16 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         private string domain = ConfigurationManager.AppSettings["domain"];
         private string automaker_domain = ConfigurationManager.AppSettings["automaker_domain"];
         private string homepage = ConfigurationManager.AppSettings["homepage"];
+        protected ReportingService2010 Service2010 = new ReportingService2010();
 
         private void Page_Load(object sender, System.EventArgs e)
         {
+            string session_info = string.Format("{0}_{1}", Consts.SESSION_INFO, Session.SessionID);
+            string session_code = string.Format("{0}_{1}", Consts.SESSION_CODE, Session.SessionID);
             if (!IsPostBack)
             {
                 string sessionId = "";
-                string code = Request["code"];
+                string code = RedisHelper.Exists(session_code) ? RedisHelper.Get<string>(session_code) : Request["code"];
                 if (null == code || code.Length == 0)
                 {
                     //跳转到登录页
@@ -47,7 +52,8 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                         SessionInfo sessionInfo = new SessionInfo(token, sessionUser);
                         //获取当前用户的权限编码列表
                         //List<string> codes = GetCurrentPrivileges(token.AccessToken);
-                        RedisHelper.Set(Consts.SESSION_INFO, sessionInfo);
+                        RedisHelper.Set(session_info, sessionInfo);
+                        RedisHelper.Set(session_code, code);
 
                         FormsAuthentication.SetAuthCookie(String.Format("{0}", sessionUser.UserDisplayName), false);
                     }
@@ -125,70 +131,59 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
             catch (Exception ex)
             {
-                throw ex;
+                LogManager.GetCurrentClassLogger().Error(ex);
+                return null;
             }
         }
 
-        //protected ReportingService2010 Service2010
-        //{
-        //    get
-        //    {
-        //        return new ReportingService2010()
-        //        {
-        //            Credentials = new NetworkCredential(RedisHelper.Get<string>("TxtUser"), RedisHelper.Get<string>("TxtPwd"), "")
-        //        };
-        //    }
-        //}
         protected void btnAddFolder_Click(object sender, EventArgs e)
         {
-            //Service2010.CreateFolder(this.tb.Text.Trim(), "/", null);
+            CatalogItem ItemInfo = null;
+            Service2010.CreateFolder(this.tb.Text.Trim(), "/", null, out ItemInfo);
         }
 
         protected void btnDelFolder_Click(object sender, EventArgs e)
         {
-            //Service2010.DeleteItem(this.tb.Text.Trim());
+            Service2010.DeleteItem(this.tb.Text.Trim());
         }
 
-        //public string GetSecurityScopes()
-        //{
-        //    return String.Join(",", Service2010.ListSecurityScopes());
-        //}
-        //public string GetModelItemTypes()
-        //{
-        //    return String.Join(",", Service2010.ListModelItemTypes());
-        //}
-
-        //public string GetItemTypes()
-        //{
-        //    return String.Join(",", Service2010.ListItemTypes());
-        //}
-        //public List<CatalogItemExt> GetCatalog()
-        //{
-        //    List<CatalogItemExt> catalogItemExts = new List<CatalogItemExt>();
-        //    foreach (CatalogItem item in Service2010.ListChildren("/", true))
-        //    {
-        //        catalogItemExts.Add(new CatalogItemExt
-        //        {
-        //            CreatedBy = item.CreatedBy,
-        //            ModifiedDateSpecified = item.ModifiedDateSpecified,
-        //            ModifiedDate = item.ModifiedDate,
-        //            CreationDateSpecified = item.CreationDateSpecified,
-        //            CreationDate = item.CreationDate,
-        //            HiddenSpecified = item.HiddenSpecified,
-        //            Hidden = item.Hidden,
-        //            Description = item.Description,
-        //            SizeSpecified = item.SizeSpecified,
-        //            Size = item.Size,
-        //            TypeName = item.TypeName,
-        //            VirtualPath = item.VirtualPath,
-        //            Path = item.Path,
-        //            Name = item.Name,
-        //            ID = item.ID,
-        //            ModifiedBy = item.ModifiedBy,
-        //            ItemMetadata = item.ItemMetadata,
-        //        });
-        //    }
-        //    return catalogItemExts;
-        //}
+        public string GetSecurityScopes()
+        {
+            return String.Join(",", Service2010.ListSecurityScopes());
+        }
+        public string GetModelItemTypes()
+        {
+            return String.Join(",", Service2010.ListModelItemTypes());
+        }
+        public string GetItemTypes()
+        {
+            return String.Join(",", Service2010.ListItemTypes());
+        }
+        public string GetServerConfigInfo()
+        {
+            string ServerConfigInfo = null;
+            try
+            {
+                Service2010.GetReportServerConfigInfo(true, out ServerConfigInfo);
+            }
+            catch (Exception ex)
+            {
+                LogManager.GetCurrentClassLogger().Error(ex);
+            }
+            return ServerConfigInfo;
+        }
+        public List<CatalogItem> GetCatalog()
+        {
+            CatalogItem[] CatalogItems = new CatalogItem[0];
+            try
+            {
+                Service2010.ListChildren("/", true, out CatalogItems);
+            }
+            catch (Exception ex)
+            {
+                LogManager.GetCurrentClassLogger().Error(ex);
+            }
+            return CatalogItems.ToList();
+        }
     }
 }

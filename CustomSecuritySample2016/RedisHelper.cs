@@ -1,6 +1,7 @@
 ﻿using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,7 +13,8 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
 {
     public static class RedisHelper
     {
-        private static string Constr = "127.0.0.1:6379,password=123456,DefaultDatabase=0";
+        private static string Constr = ConfigurationManager.AppSettings["redis"];
+        private static int Conf_ExpireMinutes = int.Parse(ConfigurationManager.AppSettings["RedisExpireMinutes"]);
 
         private static object _locker = new Object();
         private static ConnectionMultiplexer _instance = null;
@@ -110,15 +112,11 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         public static void Set(string key, object value, int expireMinutes = 0)
         {
             key = MergeKey(key);
-            if (expireMinutes > 0)
+            if (expireMinutes == 0)
             {
-                GetDatabase().StringSet(key, Serialize(value), TimeSpan.FromMinutes(expireMinutes));
+                expireMinutes = Conf_ExpireMinutes;
             }
-            else
-            {
-                GetDatabase().StringSet(key, Serialize(value));
-            }
-
+            GetDatabase().StringSet(key, Serialize(value), TimeSpan.FromMinutes(expireMinutes));
         }
 
 

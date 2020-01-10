@@ -14,10 +14,10 @@
             <asp:Button ID="btnDelFolder" runat="server" Text="删除目录" OnClick="btnDelFolder_Click" />
             <asp:Button ID="btnAddFolder" runat="server" Text="新增目录" OnClick="btnAddFolder_Click" />
             <br />
-            <%--<%  
+            <%  
                 // Folder,PowerBIReport,Report
-                List<CatalogItemExt> items = GetCatalog();
-                foreach (CatalogItemExt item in items)
+                List<CatalogItem> items = GetCatalog();
+                foreach (CatalogItem item in items)
                 {
                     switch (item.TypeName)
                     {
@@ -30,13 +30,13 @@
                 case "PowerBIReport":
             %>
             &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="javascript:void(0);" onclick="document.getElementById('frame').src='LoadPBI.aspx?s=http://10.86.65.20/reports/powerbi<%=item.Path %>?rs:embed=true&t=<%=item.Name %>&id=<%=item.ID %>'"><%=item.Name %></a><br />
+        <a href="javascript:void(0);" onclick="document.getElementById('frame').src='LoadPBI.aspx?s=/reports/powerbi<%=item.Path %>?rs:embed=true&t=<%=item.Name %>&id=<%=item.ID %>'"><%=item.Name %></a><br />
             <%
                     break;
                 case "Report":
             %>
                            &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="javascript:void(0);" onclick="document.getElementById('frame').src='LoadPBI.aspx?s=http://10.86.65.20/reports/powerbi<%=item.Path %>?rs:embed=true&t=<%=item.Name %>&id=<%=item.ID %>'"><%=item.Name %></a><br />
+        <a href="javascript:void(0);" onclick="document.getElementById('frame').src='LoadPBI.aspx?s=/reports/powerbi<%=item.Path %>?rs:embed=true&t=<%=item.Name %>&id=<%=item.ID %>'"><%=item.Name %></a><br />
             <%
                         break;
                     default:
@@ -45,17 +45,17 @@
             %>
             <%
                 }
-            %>--%>
+            %>
         </div>
         <div style="left: 41%; width: 60%; float: right; z-index: 9999; position: fixed ! important;">
             <iframe id="frame" style="width: 97%; height: 550px; border: 1px solid gray;" src="LoadPBI.aspx"></iframe>
         </div>
     </form>
     <div style="float:left; bottom:5px; position:absolute; font-size:11px;">
-       <%-- <%=Service2010.GetReportServerConfigInfo(true) %> 
+        <%=GetServerConfigInfo() %> 
         <%=GetSecurityScopes() %>
         <%=GetModelItemTypes() %>
-        <%=GetItemTypes() %>--%>
+        <%=GetItemTypes() %>
     </div>
 </body>
 </html>

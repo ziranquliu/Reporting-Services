@@ -107,6 +107,14 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="ReportingServicesLibrary, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\ReportingServicesLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="ReportingServicesWebServer, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\ReportingServicesWebServer.dll</HintPath>
@@ -165,7 +173,6 @@
     <Compile Include="Authorization.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CatalogItemExt.cs" />
     <Compile Include="CustomSecurity.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -304,6 +311,8 @@
     <Content Include="css\brand.css" />
     <Content Include="css\lib-443dcad0-751c-4017-ab6c-ae6cac983fd6.css" />
     <Content Include="dlls\Microsoft.ReportingServices.Interfaces.dll" />
+    <Content Include="dlls\NLog.dll" />
+    <Content Include="dlls\ReportingServicesLibrary.dll" />
     <Content Include="dlls\ReportingServicesWebServer.dll" />
     <Content Include="HomePage.aspx">
       <SubType>ASPXCodeBehind</SubType>
@@ -348,6 +357,7 @@
     <None Include="app.config" />
     <None Include="FormsAuth\rssrvpolicy.config" />
     <None Include="FormsAuth\web.config" />
+    <None Include="NLog.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -506,9 +516,25 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PreBuildEvent>net stop PowerBIReportServer</PreBuildEvent>
+    <PostBuildEvent>Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
+Copy /Y "$(TargetDir)$(TargetName)$(TargetExt).config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
+Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
+
+Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
+Copy /Y "$(TargetDir)$(TargetName)$(TargetExt).config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
+Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
+
+Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal"
+Copy /Y "$(TargetDir)$(TargetName)$(TargetExt).config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal"
+Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal"
+
+Copy /Y "$(ProjectDir)HomePage.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
+Copy /Y "$(ProjectDir)LoadPBI.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
+Copy /Y "$(ProjectDir)Logon.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
+Copy /Y "$(ProjectDir)NLog.config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
+
+net start PowerBIReportServer
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
