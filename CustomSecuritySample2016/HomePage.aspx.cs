@@ -1,11 +1,14 @@
-﻿using Microsoft.ReportingServices.Library.Soap2010;
+﻿using Microsoft.ReportingServices.Library.Soap;
+using Microsoft.ReportingServices.Library.Soap2010;
 using Microsoft.ReportingServices.WebServer;
+using Microsoft.Samples.ReportingServices.CustomSecurity.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -25,16 +28,20 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         private string homepage = ConfigurationManager.AppSettings["homepage"];
         protected ReportingService2010 Service2010 = new ReportingService2010();
         private string securitycode = "";
+        private Logger logger;
 
         private void Page_Load(object sender, System.EventArgs e)
         {
+            logger = LogManager.GetCurrentClassLogger(typeof(HomePage));
             string session_info = string.Format("{0}_{1}", Consts.SESSION_INFO, Session.SessionID);
             string session_code = string.Format("{0}_{1}", Consts.SESSION_CODE, Session.SessionID);
             if (!IsPostBack)
             {
                 string sessionId = "";
                 securitycode = RedisHelper.Exists(session_code) ? RedisHelper.Get<string>(session_code) : Request["code"];
-                if (null == securitycode || securitycode.Length == 0)
+                if ((null == securitycode || securitycode.Length == 0)
+                    && !RedisHelper.Exists(session_code)
+                    && !RedisHelper.Exists(session_info))
                 {
                     //跳转到登录页
                     Response.Redirect(
@@ -138,7 +145,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
             catch (Exception ex)
             {
-                LogManager.GetCurrentClassLogger().Error(ex);
+                logger.ErrorEx(ex);
                 return null;
             }
         }
@@ -146,12 +153,12 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         protected void btnAddFolder_Click(object sender, EventArgs e)
         {
             CatalogItem ItemInfo = null;
-            Service2010.CreateFolder(this.tb.Text.Trim('/', '\\'), "/", null, out ItemInfo);
+            Service2010.CreateFolder(this.tbFolder.Text.Trim('/', '\\'), "/", null, out ItemInfo);
         }
 
         protected void btnDelFolder_Click(object sender, EventArgs e)
         {
-            Service2010.DeleteItem("/" + this.tb.Text.Trim('/', '\\'));
+            Service2010.DeleteItem("/" + this.tbFolder.Text.Trim('/', '\\'));
         }
 
         public string GetSecurityScopes()
@@ -169,14 +176,14 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         public string GetServerConfigInfo()
         {
             string ServerConfigInfo = null;
-            try
-            {
-                Service2010.GetReportServerConfigInfo(true, out ServerConfigInfo);
-            }
-            catch (Exception ex)
-            {
-                LogManager.GetCurrentClassLogger().Error(ex);
-            }
+            //try
+            //{
+            //    Service2010.GetReportServerConfigInfo(true, out ServerConfigInfo);
+            //}
+            //catch (Exception ex)
+            //{
+            //    logger.ErrorEx(ex);
+            //}
             return ServerConfigInfo;
         }
         public List<CatalogItem> GetCatalog()
@@ -188,9 +195,75 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
             catch (Exception ex)
             {
-                LogManager.GetCurrentClassLogger().Error(ex);
+                logger.ErrorEx(ex);
             }
             return CatalogItems.ToList();
+        }
+
+        protected void btnUpFile_Click(object sender, EventArgs e)
+        {
+            if (this.upFile.HasFile)
+            {
+                FileInfo fileInfo = new FileInfo(this.upFile.PostedFile.FileName);
+                string itemtype = "";
+                if (fileInfo.Extension == ".pbix")
+                {
+                    itemtype = CatalogItemTypeEnum.Report.ToString();
+                }
+                if (fileInfo.Extension == ".rdl")
+                {
+                    itemtype = CatalogItemTypeEnum.Report.ToString();
+                }
+                if (itemtype.Length > 0)
+                {
+                    try
+                    {
+                        CatalogItem catalogItem = null;
+                        byte[] definition = null;
+                        Warning[] warns = null;
+                        
+                        try
+                        {
+                            Stream stream = this.upFile.PostedFile.InputStream;
+                            definition = new byte[stream.Length];
+                            stream.Read(definition, 0, (int)stream.Length);
+                            stream.Close();
+                        }
+                        catch (IOException ex)
+                        {
+                            logger.ErrorEx(ex);
+                        }
+                        string parent = this.tbFolder.Text.Trim();
+                        if (string.IsNullOrEmpty(parent))
+                        {
+                            parent = "/";
+                        }
+                        else
+                        {
+                            if (!parent.StartsWith("/"))
+                            {
+                                parent = "/" + parent;
+                            }
+                        }
+                        Service2010.CreateCatalogItem(
+                            itemtype,
+                            fileInfo.Name,
+                            parent,
+                            true, definition, null, out catalogItem, out warns
+                            );
+                        logger.WarnEx(warns);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.ErrorEx(ex);
+                    }
+                }
+            }
+        }
+
+        protected void btnDelFile_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

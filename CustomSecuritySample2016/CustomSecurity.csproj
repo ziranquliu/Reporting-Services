@@ -147,6 +147,7 @@
   <ItemGroup>
     <Compile Include="Consts.cs" />
     <Compile Include="DatatableToEntity.cs" />
+    <Compile Include="Enums\CatalogItemTypeEnum.cs" />
     <Compile Include="HttpUtils.cs" />
     <Compile Include="LoadPBI.aspx.cs">
       <DependentUpon>LoadPBI.aspx</DependentUpon>
@@ -155,6 +156,7 @@
     <Compile Include="LoadPBI.aspx.designer.cs">
       <DependentUpon>LoadPBI.aspx.cs</DependentUpon>
     </Compile>
+    <Compile Include="NLogHelper.cs" />
     <Compile Include="SessionInfo.cs" />
     <Compile Include="SessionUser.cs" />
     <Compile Include="SqlHelper.cs" />
@@ -514,12 +516,14 @@
       <CachedSettingsPropName>Microsoft_Samples_ReportingServices_CustomSecurity_localhost_ReportingService2010</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>net stop PowerBIReportServer</PreBuildEvent>
     <PostBuildEvent>Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 Copy /Y "$(TargetDir)$(TargetName)$(TargetExt).config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
+Copy /Y "$(ProjectDir)ReportingServicesService.exe.config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 
 Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
 Copy /Y "$(TargetDir)$(TargetName)$(TargetExt).config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
@@ -534,7 +538,6 @@ Copy /Y "$(ProjectDir)LoadPBI.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Repor
 Copy /Y "$(ProjectDir)Logon.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
 Copy /Y "$(ProjectDir)NLog.config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
 
-net start PowerBIReportServer
-</PostBuildEvent>
+net start PowerBIReportServer</PostBuildEvent>
   </PropertyGroup>
 </Project>

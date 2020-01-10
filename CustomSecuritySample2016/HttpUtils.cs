@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,11 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
 {
     class HttpUtils
     {
+        private static Logger logger;
+        static HttpUtils()
+        {
+            logger = LogManager.GetCurrentClassLogger(typeof(HomePage));
+        }
         public static string Get(string Url)
         {
             //System.GC.Collect();
@@ -94,13 +100,13 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             catch (WebException ex)
             {
                 HttpWebResponse res = (HttpWebResponse)ex.Response;
+                logger.ErrorEx(ex);
                 return null;
-                //return ex.Message;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
+                logger.ErrorEx(ex);
                 return null;
-                //return ex.Message;
             }
         }
         public static string HttpPost(string url, Dictionary<string, string> postData = null, Dictionary<string, string> files = null)

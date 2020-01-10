@@ -11,5 +11,8 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         public const string SESSION_INFO = "SESSION_INFO";
 
         public const string SESSION_CODE = "SESSION_CODE";
+
+        public const string NLogStart = "---------------------------------------------------------------";
+        public const string NLogEnd =   "===============================================================";
     }
 }

@@ -24,13 +24,22 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// tb 控件。
+        /// tbFolder 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb;
+        protected global::System.Web.UI.WebControls.TextBox tbFolder;
+
+        /// <summary>
+        /// btnAddFolder 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAddFolder;
 
         /// <summary>
         /// btnDelFolder 控件。
@@ -42,12 +51,30 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         protected global::System.Web.UI.WebControls.Button btnDelFolder;
 
         /// <summary>
-        /// btnAddFolder 控件。
+        /// upFile 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAddFolder;
+        protected global::System.Web.UI.WebControls.FileUpload upFile;
+
+        /// <summary>
+        /// btnUpFile 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUpFile;
+
+        /// <summary>
+        /// btnDelFile 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDelFile;
     }
 }
