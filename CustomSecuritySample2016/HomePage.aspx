@@ -20,22 +20,37 @@
             <dl id="list"></dl>
             <script type="text/javascript">
                 $(function () {
+                    LoadRoot();
+                });
+
+                function LoadRoot() {
                     var rootid = "c6c3d333-439d-4293-b464-f8d5a8b8d1c8";
-                    var url = "http://bji065-l7338977/ReportS/api/v2.0/catalogitems(" + rootid + ")/Model.Folder/catalogitems/?$orderby=name%20ASC";
+                    var url = "http://bji065-l7338977/Reports/api/v2.0/catalogitems(" + rootid + ")/Model.Folder/catalogitems/?$orderby=name%20ASC";
                     $.get(url, function (data) {
                         $("#list").empty();
                         for (index in data.value) {
                             $("#list").append("<dt><span onclick=\"loadChild(this,'" + data.value[index].Id + "')\">" + data.value[index].Name + "</span></dt>");
                         }
                     });
-                });
+                }
 
                 function loadChild(obj, id) {
-                    var url = "http://bji065-l7338977/ReportS/api/v2.0/catalogitems(" + id + ")/Model.Folder/catalogitems/?$orderby=name%20ASC";
+                    var url = "http://bji065-l7338977/Reports/api/v2.0/catalogitems(" + id + ")/Model.Folder/catalogitems/?$orderby=name%20ASC";
                     $.get(url, function (data) {
                         $(obj).parent().find("dd").remove();
                         for (index in data.value) {
                             $(obj).parent().append("<dd><a href='javascript:void(0);' onclick=\"document.getElementById('frame').src='/reports/powerbi" + data.value[index].Path + "?rs:embed=true';\">" + data.value[index].Name + "</a></dd>");
+                        }
+                    });
+                }
+
+                function Delete(obj,id) {
+                    var url = "http://bji065-l7338977/Reports/api/v2.0/catalogitems(" + id + ")";
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        success: function (result) {
+                            $(obj).remove();
                         }
                     });
                 }
