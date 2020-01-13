@@ -148,6 +148,9 @@
     <Compile Include="Consts.cs" />
     <Compile Include="DatatableToEntity.cs" />
     <Compile Include="Enums\CatalogItemTypeEnum.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="HttpUtils.cs" />
     <Compile Include="NLogHelper.cs" />
     <Compile Include="SessionInfo.cs" />
@@ -179,10 +182,6 @@
     </Compile>
     <Compile Include="HomePage.aspx.designer.cs">
       <DependentUpon>HomePage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Logon.aspx.cs">
-      <DependentUpon>Logon.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -307,13 +306,11 @@
     <Content Include="dlls\ReportingServicesLibrary.dll" />
     <Content Include="dlls\ReportingServicesWebServer.dll" />
     <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
     <Content Include="HomePage.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
     <Content Include="Setup\CreateUserStore.sql" />
-    <Content Include="Logon.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -327,6 +324,7 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WindowsAuth\global.asax" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App_LocalResources\Logon.aspx.resx">
@@ -522,6 +520,7 @@ Copy /Y "$(ProjectDir)HomePage.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Repo
 Copy /Y "$(ProjectDir)LoadPBI.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
 Copy /Y "$(ProjectDir)Logon.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
 Copy /Y "$(ProjectDir)NLog.config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
+Copy /Y "$(ProjectDir)global.asax" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
 
 net start PowerBIReportServer</PostBuildEvent>
   </PropertyGroup>
