@@ -157,11 +157,6 @@
     <Compile Include="SessionUser.cs" />
     <Compile Include="SqlHelper.cs" />
     <Compile Include="SSOAccessToken.cs" />
-    <Compile Include="App_LocalResources\Logon.aspx.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Logon.aspx.resx</DependentUpon>
-    </Compile>
     <Compile Include="AuthenticationExtension.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -310,6 +305,7 @@
     <Content Include="HomePage.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
+    <Content Include="index.html" />
     <Content Include="Setup\CreateUserStore.sql" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
@@ -327,11 +323,6 @@
     <Content Include="WindowsAuth\global.asax" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_LocalResources\Logon.aspx.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Logon.aspx.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="CustomSecurity.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CustomSecurity.Designer.cs</LastGenOutput>
@@ -504,23 +495,20 @@
   <PropertyGroup>
     <PreBuildEvent>net stop PowerBIReportServer</PreBuildEvent>
     <PostBuildEvent>Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
-Copy /Y "$(TargetDir)$(TargetName)$(TargetExt).config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 Copy /Y "$(ProjectDir)ReportingServicesService.exe.config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 
 Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
-Copy /Y "$(TargetDir)$(TargetName)$(TargetExt).config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
 Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
 
 Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal"
-Copy /Y "$(TargetDir)$(TargetName)$(TargetExt).config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal"
 Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal"
 
 Copy /Y "$(ProjectDir)HomePage.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
-Copy /Y "$(ProjectDir)LoadPBI.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
-Copy /Y "$(ProjectDir)Logon.aspx" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
 Copy /Y "$(ProjectDir)NLog.config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
 Copy /Y "$(ProjectDir)global.asax" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
+Copy /Y "$(ProjectDir)index.html" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
+Copy /Y "$(ProjectDir)favicon.ico" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer"
 
 net start PowerBIReportServer</PostBuildEvent>
   </PropertyGroup>
