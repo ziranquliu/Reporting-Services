@@ -162,14 +162,6 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         {
             Service2010.DeleteItem("/" + this.tbFolder.Text.Trim('/', '\\'));
         }
-     
-        public string ExitLogon()
-        {
-            RedisHelper.Remove(session_code);
-            RedisHelper.Remove(session_info);
-            FormsAuthentication.SignOut();
-            return "ok";
-        }
 
         //public string GetSecurityScopes()
         //{
