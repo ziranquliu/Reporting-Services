@@ -6,16 +6,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>主页</title>
+    <link rel='icon' href="favicon.ico" />
     <script src="/powerbi/libs/scripts/jquery.js" type="text/javascript"></script>
     <script src="/powerbi/libs/scripts/angular.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        function AddFolder() {
-
-        }
-        function DelFolder() {
-
-        }
-    </script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -26,7 +19,6 @@
             <br />
             <dl id="list"></dl>
             <script type="text/javascript">
-
                 $(function () {
                     var rootid = "c6c3d333-439d-4293-b464-f8d5a8b8d1c8";
                     var url = "http://bji065-l7338977/ReportS/api/v2.0/catalogitems(" + rootid + ")/Model.Folder/catalogitems/?$orderby=name%20ASC";
@@ -48,46 +40,6 @@
                     });
                 }
             </script>
-            <%--<asp:TextBox ID="tbFolder" runat="server"></asp:TextBox>
-            <asp:Button ID="btnAddFolder" runat="server" Text="新增目录" OnClick="btnAddFolder_Click" />
-            <asp:Button ID="btnDelFolder" runat="server" Text="删除目录" OnClick="btnDelFolder_Click" />
-            <br />
-            <asp:FileUpload ID="upFile" runat="server" />
-            <asp:Button ID="btnUpFile" runat="server" Text="上传报表" OnClick="btnUpFile_Click" />
-            <asp:Button ID="btnDelFile" runat="server" Text="删除报表" OnClick="btnDelFile_Click" />
-            <br />
-            <%  
-                // Folder,PowerBIReport,Report
-                List<CatalogItem> items = GetCatalog();
-                foreach (CatalogItem item in items)
-                {
-                    switch (item.TypeName)
-                    {
-                        case "Folder":
-            %>
-            <%=item.Name %>
-            <br />
-            <%
-                    break;
-                case "PowerBIReport":
-            %>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="javascript:void(0);" onclick="document.getElementById('frame').src='/reports/powerbi<%=item.Path %>?rs:embed=true'"><%=item.Name %></a><br />
-            <%
-                    break;
-                case "Report":
-            %>
-                           &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="javascript:void(0);" onclick="document.getElementById('frame').src='/reports/powerbi<%=item.Path %>?rs:embed=true'"><%=item.Name %></a><br />
-            <%
-                        break;
-                    default:
-                        break;
-                }
-            %>
-            <%
-                }
-            %>--%>
         </div>
         <div style="left: 41%; width: 60%; float: right; z-index: 9999; position: fixed ! important;">
             <iframe id="frame" style="width: 97%; height: 550px; border: 1px solid gray;"></iframe>
