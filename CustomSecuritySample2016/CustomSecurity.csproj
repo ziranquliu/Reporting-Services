@@ -331,6 +331,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="FormsAuth\RSPortal.exe.config" />
     <None Include="FormsAuth\rssrvpolicy.config" />
     <None Include="FormsAuth\web.config" />
     <None Include="NLog.config" />
@@ -339,10 +340,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="ReportingServicesService.exe.config">
+    <None Include="FormsAuth\ReportingServicesService.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ReportingServicesService.exe.config.bak" />
+    <None Include="WindowsAuth\ReportingServicesService.exe.config" />
     <None Include="FormsAuth\rsreportserver.config" />
     <None Include="Setup\RestoreDatabase.sql" />
     <None Include="Web References\localhost\ActiveState.datasource">
@@ -443,6 +444,7 @@
     <None Include="Web References\localhost\Warning.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="WindowsAuth\RSPortal.exe.config" />
     <None Include="WindowsAuth\rsreportserver.config" />
     <None Include="WindowsAuth\rssrvpolicy.config" />
     <None Include="WindowsAuth\web.config" />

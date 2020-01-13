@@ -71,7 +71,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                             RedisHelper.Set(session_code, securitycode);
                         }
 
-                        FormsAuthentication.SetAuthCookie(String.Format("{0}", sessionUser.UserDisplayName), false);
+                        FormsAuthentication.SetAuthCookie(String.Format("{0}", sessionUser.Email), false);
                     }
                 }
             }
