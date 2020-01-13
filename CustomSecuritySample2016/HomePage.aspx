@@ -46,8 +46,8 @@
         </div>
         <script src="/Reports/assets/js/oauth.js"></script>
         <script src="/Reports/assets/js/app-443dcad0-751c-4017-ab6c-ae6cac983fd6.js"></script>
-        <div style="right: 10px; bottom:5px; position:absolute;">
-            <asp:Button ID="btnExit" runat="server" Text="退出" style="color:green;" OnClick="btnExit_Click" />
+        <div style="right: 10px; bottom: 5px; position: absolute;">
+            <a href="javascript:void(0);" onclick="window.document.location.href='<%=domain %>/logout?redirect_login=true'">退出</a>
         </div>
     </form>
 </body>

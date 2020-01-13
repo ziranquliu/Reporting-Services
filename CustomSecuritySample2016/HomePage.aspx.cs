@@ -21,16 +21,16 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
 {
     public partial class HomePage : System.Web.UI.Page
     {
-        private string clientId = ConfigurationManager.AppSettings["client_id"];
-        private string clientSecret = ConfigurationManager.AppSettings["client_secret"];
-        private string domain = ConfigurationManager.AppSettings["domain"];
-        private string automaker_domain = ConfigurationManager.AppSettings["automaker_domain"];
-        private string homepage = ConfigurationManager.AppSettings["homepage"];
+        protected string clientId = ConfigurationManager.AppSettings["client_id"];
+        protected string clientSecret = ConfigurationManager.AppSettings["client_secret"];
+        protected string domain = ConfigurationManager.AppSettings["domain"];
+        protected string automaker_domain = ConfigurationManager.AppSettings["automaker_domain"];
+        protected string homepage = ConfigurationManager.AppSettings["homepage"];
         protected ReportingService2010 Service2010 = new ReportingService2010();
-        private string securitycode = "";
-        private Logger logger;
-        private string session_info;
-        private string session_code;
+        protected string securitycode = "";
+        protected Logger logger;
+        protected string session_info;
+        protected string session_code;
 
         private void Page_Load(object sender, System.EventArgs e)
         {
@@ -162,14 +162,13 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         {
             Service2010.DeleteItem("/" + this.tbFolder.Text.Trim('/', '\\'));
         }
-
-        protected void btnExit_Click(object sender, EventArgs e)
+     
+        public string ExitLogon()
         {
             RedisHelper.Remove(session_code);
             RedisHelper.Remove(session_info);
             FormsAuthentication.SignOut();
-            string result = HttpUtils.Get(domain + "/logout?redirect_login=true");
-            Response.Redirect(domain + "/ent/login", true);
+            return "ok";
         }
 
         //public string GetSecurityScopes()
