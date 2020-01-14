@@ -40,7 +40,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (!IsPostBack)
             {
                 string sessionId = "";
-                securitycode = RedisHelper.Exists(session_code) ? RedisHelper.Get<string>(session_code) : Request["code"];
+                securitycode = Request["code"];
                 if ((null == securitycode || securitycode.Length == 0)
                     && !RedisHelper.Exists(session_code)
                     && !RedisHelper.Exists(session_info))
@@ -54,8 +54,9 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                 }
                 else
                 {
+                    securitycode = !RedisHelper.Exists(session_info) ? Request["code"] : RedisHelper.Get<string>(session_code);
                     //获取token
-                    SSOAccessToken token = GetAccessToken(Request);
+                    SSOAccessToken token = GetAccessToken();
                     if (token != null)
                     {
                         SessionUser sessionUser = GetUserInfo(token);
@@ -76,6 +77,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                 }
             }
         }
+
         private SessionUser GetUserInfo(SSOAccessToken token)
         {
             string accountId = token.OpenId;
@@ -113,7 +115,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
         }
 
-        private SSOAccessToken GetAccessToken(HttpRequest request)
+        private SSOAccessToken GetAccessToken()
         {
             Dictionary<string, string> paramsMap = new Dictionary<string, string>();
             paramsMap.Add("client_id", clientId);

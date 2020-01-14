@@ -54,7 +54,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         {
             get
             {
-                return null;
+                return "Microsoft.Samples.ReportingServices.CustomSecurity.AuthenticationExtension";
             }
         }
 

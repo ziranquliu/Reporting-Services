@@ -98,6 +98,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportingServices.Authorization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal\Microsoft.ReportingServices.Authorization.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ReportingServices.Interfaces">
       <HintPath>D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\Microsoft.ReportingServices.Interfaces.dll</HintPath>
     </Reference>
@@ -163,7 +167,7 @@
     <Compile Include="AuthenticationUtilities.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Authorization.cs">
+    <Compile Include="AuthorizationExtension.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CustomSecurity.Designer.cs">
@@ -296,6 +300,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Content Include="dlls\Microsoft.ReportingServices.Authorization.dll" />
     <Content Include="dlls\Microsoft.ReportingServices.Interfaces.dll" />
     <Content Include="dlls\NLog.dll" />
     <Content Include="dlls\ReportingServicesLibrary.dll" />
