@@ -106,10 +106,6 @@
       <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.ReportingServices.Authorization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal\Microsoft.ReportingServices.Authorization.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.ReportingServices.Interfaces">
       <HintPath>D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\Microsoft.ReportingServices.Interfaces.dll</HintPath>
     </Reference>
@@ -311,7 +307,6 @@
     <Content Include="CatalogTempDB.sql" />
     <Content Include="dlls\EntityFramework.dll" />
     <Content Include="dlls\EntityFramework.SqlServer.dll" />
-    <Content Include="dlls\Microsoft.ReportingServices.Authorization.dll" />
     <Content Include="dlls\Microsoft.ReportingServices.Interfaces.dll" />
     <Content Include="dlls\NLog.dll" />
     <Content Include="dlls\ReportingServicesLibrary.dll" />
@@ -348,6 +343,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="FormsAuth\RSPortal.exe.config" />
+    <None Include="FormsAuth\RSPowerBI.exe.config" />
     <None Include="FormsAuth\rssrvpolicy.config" />
     <None Include="FormsAuth\web.config" />
     <None Include="NLog.config" />
