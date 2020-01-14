@@ -1,7 +1,6 @@
 ﻿using Microsoft.ReportingServices.Library.Soap;
 using Microsoft.ReportingServices.Library.Soap2010;
 using Microsoft.ReportingServices.WebServer;
-using Microsoft.Samples.ReportingServices.CustomSecurity.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -57,9 +56,10 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                     securitycode = !RedisHelper.Exists(session_info) ? Request["code"] : RedisHelper.Get<string>(session_code);
                     //获取token
                     SSOAccessToken token = GetAccessToken();
-                    if (token != null)
+                    int accountId = 0;
+                    if (token != null&& int.TryParse(token.OpenId,out accountId))
                     {
-                        SessionUser sessionUser = GetUserInfo(token);
+                        SessionUser sessionUser = SqlHelper.GetUserInfoByAccount(accountId);
                         SessionInfo sessionInfo = new SessionInfo(token, sessionUser);
                         //获取当前用户的权限编码列表
                         //List<string> codes = GetCurrentPrivileges(token.AccessToken);
@@ -78,28 +78,6 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
         }
 
-        private SessionUser GetUserInfo(SSOAccessToken token)
-        {
-            string accountId = token.OpenId;
-            string sql = String.Format(@"SELECT 
-                            ME.AccountId,
-                            ME.UserId,
-							UA.DisplayName AS UserDisplayName,
-							UA.Email,
-							UA.Mobile,
-                            MD.Id AS DealerId,
-                            SO.DealerCode,
-							MD.ShortName,
-							MD.FullName,
-                            SO.Id AS OrgId,
-                            SO.Name AS OrgName
-                        FROM MdmEmployee ME
-                        LEFT JOIN SysOrg SO ON ME.OrgId = SO.Id
-                        LEFT JOIN MdmDealer MD ON MD.DealerCode = SO.DealerCode
-						LEFT JOIN UsAccount UA ON UA.Id=ME.AccountId
-                        WHERE ME.AccountId = '{0}'", long.Parse(accountId));
-            return DatatableToEntity<SessionUser>.FillModel(SqlHelper.ExecuteDataTable(sql)).FirstOrDefault();
-        }
         private List<string> GetCurrentPrivileges(string accessToken)
         {
             try
@@ -164,110 +142,5 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         {
             Service2010.DeleteItem("/" + this.tbFolder.Text.Trim('/', '\\'));
         }
-
-        //public string GetSecurityScopes()
-        //{
-        //    return String.Join(",", Service2010.ListSecurityScopes());
-        //}
-        //public string GetModelItemTypes()
-        //{
-        //    return String.Join(",", Service2010.ListModelItemTypes());
-        //}
-        //public string GetItemTypes()
-        //{
-        //    return String.Join(",", Service2010.ListItemTypes());
-        //}
-        //public string GetServerConfigInfo()
-        //{
-        //    string ServerConfigInfo = null;
-        //    //try
-        //    //{
-        //    //    Service2010.GetReportServerConfigInfo(true, out ServerConfigInfo);
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    logger.ErrorEx(ex);
-        //    //}
-        //    return ServerConfigInfo;
-        //}
-        //public List<CatalogItem> GetCatalog()
-        //{
-        //    CatalogItem[] CatalogItems = new CatalogItem[0];
-        //    try
-        //    {
-        //        Service2010.ListChildren("/", true, out CatalogItems);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        logger.ErrorEx(ex);
-        //    }
-        //    return CatalogItems.ToList();
-        //}
-
-        //protected void btnUpFile_Click(object sender, EventArgs e)
-        //{
-        //    if (this.upFile.HasFile)
-        //    {
-        //        FileInfo fileInfo = new FileInfo(this.upFile.PostedFile.FileName);
-        //        string itemtype = "";
-        //        if (fileInfo.Extension == ".pbix")
-        //        {
-        //            itemtype = CatalogItemTypeEnum.Report.ToString();
-        //        }
-        //        if (fileInfo.Extension == ".rdl")
-        //        {
-        //            itemtype = CatalogItemTypeEnum.Report.ToString();
-        //        }
-        //        if (itemtype.Length > 0)
-        //        {
-        //            try
-        //            {
-        //                CatalogItem catalogItem = null;
-        //                byte[] definition = null;
-        //                Warning[] warns = null;
-
-        //                try
-        //                {
-        //                    Stream stream = this.upFile.PostedFile.InputStream;
-        //                    definition = new byte[stream.Length];
-        //                    stream.Read(definition, 0, (int)stream.Length);
-        //                    stream.Close();
-        //                }
-        //                catch (IOException ex)
-        //                {
-        //                    logger.ErrorEx(ex);
-        //                }
-        //                string parent = this.tbFolder.Text.Trim();
-        //                if (string.IsNullOrEmpty(parent))
-        //                {
-        //                    parent = "/";
-        //                }
-        //                else
-        //                {
-        //                    if (!parent.StartsWith("/"))
-        //                    {
-        //                        parent = "/" + parent;
-        //                    }
-        //                }
-        //                Service2010.CreateCatalogItem(
-        //                    itemtype,
-        //                    fileInfo.Name,
-        //                    parent,
-        //                    true, definition, null, out catalogItem, out warns
-        //                    );
-        //                logger.WarnEx(warns);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                logger.ErrorEx(ex);
-        //            }
-        //        }
-        //    }
-        //}
-
-        //protected void btnDelFile_Click(object sender, EventArgs e)
-        //{
-
-        //}
     }
 }

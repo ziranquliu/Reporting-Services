@@ -685,46 +685,6 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (IsAdmin(userName))
             {
                 permissions.AddRange(_fullPermissions.ToArray());
-                //foreach (CatalogOperation oper in m_CatOperNames.Keys)
-                //{
-                //    if (!permissions.Contains((string)m_CatOperNames[oper]))
-                //        permissions.Add((string)m_CatOperNames[oper]);
-                //}
-                //foreach (ModelItemOperation oper in m_ModelItemOperNames.Keys)
-                //{
-                //    if (!permissions.Contains((string)m_ModelItemOperNames[oper]))
-                //        permissions.Add((string)m_ModelItemOperNames[oper]);
-                //}
-                //foreach (ModelOperation oper in m_ModelOperNames.Keys)
-                //{
-                //    if (!permissions.Contains((string)m_ModelOperNames[oper]))
-                //        permissions.Add((string)m_ModelOperNames[oper]);
-                //}
-                //foreach (CatalogOperation oper in m_CatOperNames.Keys)
-                //{
-                //    if (!permissions.Contains((string)m_CatOperNames[oper]))
-                //        permissions.Add((string)m_CatOperNames[oper]);
-                //}
-                //foreach (ReportOperation oper in m_RptOperNames.Keys)
-                //{
-                //    if (!permissions.Contains((string)m_RptOperNames[oper]))
-                //        permissions.Add((string)m_RptOperNames[oper]);
-                //}
-                //foreach (FolderOperation oper in m_FldOperNames.Keys)
-                //{
-                //    if (!permissions.Contains((string)m_FldOperNames[oper]))
-                //        permissions.Add((string)m_FldOperNames[oper]);
-                //}
-                //foreach (ResourceOperation oper in m_ResOperNames.Keys)
-                //{
-                //    if (!permissions.Contains((string)m_ResOperNames[oper]))
-                //        permissions.Add((string)m_ResOperNames[oper]);
-                //}
-                //foreach (DatasourceOperation oper in m_DSOperNames.Keys)
-                //{
-                //    if (!permissions.Contains((string)m_DSOperNames[oper]))
-                //        permissions.Add((string)m_DSOperNames[oper]);
-                //}
             }
             else
             {
@@ -833,7 +793,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             get
             {
                 // Return a localized name for this extension
-                return "Microsoft.Samples.ReportingServices.CustomSecurity.AuthorizationExtension";
+                return null;
             }
         }
     }
