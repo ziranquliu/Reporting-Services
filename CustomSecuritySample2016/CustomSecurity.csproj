@@ -160,7 +160,6 @@
     <Compile Include="AuthenticationUtilities.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="DatatableToEntity.cs" />
-    <Compile Include="Enums\CatalogItemTypeEnum.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -308,6 +307,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Content Include="Catalog.sql" />
+    <Content Include="CatalogTempDB.sql" />
     <Content Include="dlls\EntityFramework.dll" />
     <Content Include="dlls\EntityFramework.SqlServer.dll" />
     <Content Include="dlls\Microsoft.ReportingServices.Authorization.dll" />
