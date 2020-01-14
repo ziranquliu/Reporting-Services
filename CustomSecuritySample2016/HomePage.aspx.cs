@@ -57,9 +57,10 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                     securitycode = !RedisHelper.Exists(session_info) ? Request["code"] : RedisHelper.Get<string>(session_code);
                     //获取token
                     SSOAccessToken token = GetAccessToken();
-                    if (token != null)
+                    long accountId = 0;
+                    if (token != null && long.TryParse(token.OpenId, out accountId))
                     {
-                        SessionUser sessionUser = GetUserInfo(token);
+                        SessionUser sessionUser = SqlHelper.GetUserInfoByAccount(accountId);
                         SessionInfo sessionInfo = new SessionInfo(token, sessionUser);
                         //获取当前用户的权限编码列表
                         //List<string> codes = GetCurrentPrivileges(token.AccessToken);
@@ -76,29 +77,6 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                     }
                 }
             }
-        }
-
-        private SessionUser GetUserInfo(SSOAccessToken token)
-        {
-            string accountId = token.OpenId;
-            string sql = String.Format(@"SELECT 
-                            ME.AccountId,
-                            ME.UserId,
-							UA.DisplayName AS UserDisplayName,
-							UA.Email,
-							UA.Mobile,
-                            MD.Id AS DealerId,
-                            SO.DealerCode,
-							MD.ShortName,
-							MD.FullName,
-                            SO.Id AS OrgId,
-                            SO.Name AS OrgName
-                        FROM MdmEmployee ME
-                        LEFT JOIN SysOrg SO ON ME.OrgId = SO.Id
-                        LEFT JOIN MdmDealer MD ON MD.DealerCode = SO.DealerCode
-						LEFT JOIN UsAccount UA ON UA.Id=ME.AccountId
-                        WHERE ME.AccountId = '{0}'", long.Parse(accountId));
-            return DatatableToEntity<SessionUser>.FillModel(SqlHelper.ExecuteDataTable(sql)).FirstOrDefault();
         }
         private List<string> GetCurrentPrivileges(string accessToken)
         {

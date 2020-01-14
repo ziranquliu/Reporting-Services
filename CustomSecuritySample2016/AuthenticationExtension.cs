@@ -140,55 +140,8 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope")]
         public static bool VerifyUser(string userEmail)
         {
-            bool isValid = false;
-            string sql = string.Format(@"SELECT 
-                            ME.AccountId,
-                            ME.UserId,
-                            UA.DisplayName AS UserDisplayName,
-                            UA.Email,
-                            UA.Mobile,
-                            MD.Id AS DealerId,
-                            SO.DealerCode,
-                            MD.ShortName,
-                            MD.FullName,
-                            SO.Id AS OrgId,
-                            SO.Name AS OrgName
-                        FROM MdmEmployee ME
-                        LEFT JOIN SysOrg SO ON ME.OrgId = SO.Id
-                        LEFT JOIN MdmDealer MD ON MD.DealerCode = SO.DealerCode
-                        LEFT JOIN UsAccount UA ON UA.Id = ME.AccountId
-                        WHERE UA.Email = '{0}'", userEmail);
-            using (SqlConnection conn = new SqlConnection(SqlHelper.GetSqlConnectionString()))
-            {
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.CommandType = CommandType.Text;
-                //SqlCommand cmd = new SqlCommand("LookupUser", conn);
-                //cmd.CommandType = CommandType.StoredProcedure;
-
-                //SqlParameter sqlParam = cmd.Parameters.Add("@userName",
-                // SqlDbType.VarChar,
-                // 255);
-                //sqlParam.Value = userName;
-                try
-                {
-                    conn.Open();
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        // If a row exists for the user, then the user is valid.
-                        if (reader.Read())
-                        {
-                            isValid = true;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                    CustomSecurity.VerifyError + ex.Message));
-                }
-            }
-
-            return isValid;
+            SessionUser sessionUser = SqlHelper.GetUserInfoByEmail(userEmail);
+            return sessionUser != null;
         }
     }
 }
