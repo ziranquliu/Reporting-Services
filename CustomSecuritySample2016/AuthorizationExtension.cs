@@ -78,8 +78,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         private static void InitializeMaps()
         {
             // create model operation names data
-            m_ModelItemOperNames.Add(ModelItemOperation.ReadProperties,
-               OperationNames.OperReadProperties);
+            m_ModelItemOperNames.Add(ModelItemOperation.ReadProperties, OperationNames.OperReadProperties);
 
             if (m_ModelItemOperNames.Count != NrModelItemOperations)
             {
@@ -89,28 +88,17 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
 
             // create model operation names data
-            m_ModelOperNames.Add(ModelOperation.Delete,
-               OperationNames.OperDelete);
-            m_ModelOperNames.Add(ModelOperation.ReadAuthorizationPolicy,
-              OperationNames.OperReadAuthorizationPolicy);
-            m_ModelOperNames.Add(ModelOperation.ReadContent,
-              OperationNames.OperReadContent);
-            m_ModelOperNames.Add(ModelOperation.ReadDatasource,
-              OperationNames.OperReadDatasources);
-            m_ModelOperNames.Add(ModelOperation.ReadModelItemAuthorizationPolicies,
-              OperationNames.OperReadModelItemSecurityPolicies);
-            m_ModelOperNames.Add(ModelOperation.ReadProperties,
-              OperationNames.OperReadProperties);
-            m_ModelOperNames.Add(ModelOperation.UpdateContent,
-              OperationNames.OperUpdateContent);
-            m_ModelOperNames.Add(ModelOperation.UpdateDatasource,
-              OperationNames.OperUpdateDatasources);
-            m_ModelOperNames.Add(ModelOperation.UpdateDeleteAuthorizationPolicy,
-              OperationNames.OperUpdateDeleteAuthorizationPolicy);
-            m_ModelOperNames.Add(ModelOperation.UpdateModelItemAuthorizationPolicies,
-              OperationNames.OperUpdateModelItemSecurityPolicies);
-            m_ModelOperNames.Add(ModelOperation.UpdateProperties,
-              OperationNames.OperUpdatePolicy);
+            m_ModelOperNames.Add(ModelOperation.Delete, OperationNames.OperDelete);
+            m_ModelOperNames.Add(ModelOperation.ReadAuthorizationPolicy, OperationNames.OperReadAuthorizationPolicy);
+            m_ModelOperNames.Add(ModelOperation.ReadContent, OperationNames.OperReadContent);
+            m_ModelOperNames.Add(ModelOperation.ReadDatasource, OperationNames.OperReadDatasources);
+            m_ModelOperNames.Add(ModelOperation.ReadModelItemAuthorizationPolicies, OperationNames.OperReadModelItemSecurityPolicies);
+            m_ModelOperNames.Add(ModelOperation.ReadProperties, OperationNames.OperReadProperties);
+            m_ModelOperNames.Add(ModelOperation.UpdateContent, OperationNames.OperUpdateContent);
+            m_ModelOperNames.Add(ModelOperation.UpdateDatasource, OperationNames.OperUpdateDatasources);
+            m_ModelOperNames.Add(ModelOperation.UpdateDeleteAuthorizationPolicy, OperationNames.OperUpdateDeleteAuthorizationPolicy);
+            m_ModelOperNames.Add(ModelOperation.UpdateModelItemAuthorizationPolicies, OperationNames.OperUpdateModelItemSecurityPolicies);
+            m_ModelOperNames.Add(ModelOperation.UpdateProperties, OperationNames.OperUpdatePolicy);
 
             if (m_ModelOperNames.Count != NrModelOperations)
             {
@@ -120,38 +108,22 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             }
 
             // create operation names data
-            m_CatOperNames.Add(CatalogOperation.CreateRoles,
-               OperationNames.OperCreateRoles);
-            m_CatOperNames.Add(CatalogOperation.DeleteRoles,
-               OperationNames.OperDeleteRoles);
-            m_CatOperNames.Add(CatalogOperation.ReadRoleProperties,
-               OperationNames.OperReadRoleProperties);
-            m_CatOperNames.Add(CatalogOperation.UpdateRoleProperties,
-               OperationNames.OperUpdateRoleProperties);
-            m_CatOperNames.Add(CatalogOperation.ReadSystemProperties,
-               OperationNames.OperReadSystemProperties);
-            m_CatOperNames.Add(CatalogOperation.UpdateSystemProperties,
-               OperationNames.OperUpdateSystemProperties);
-            m_CatOperNames.Add(CatalogOperation.GenerateEvents,
-               OperationNames.OperGenerateEvents);
-            m_CatOperNames.Add(CatalogOperation.ReadSystemSecurityPolicy,
-               OperationNames.OperReadSystemSecurityPolicy);
-            m_CatOperNames.Add(CatalogOperation.UpdateSystemSecurityPolicy,
-               OperationNames.OperUpdateSystemSecurityPolicy);
-            m_CatOperNames.Add(CatalogOperation.CreateSchedules,
-               OperationNames.OperCreateSchedules);
-            m_CatOperNames.Add(CatalogOperation.DeleteSchedules,
-               OperationNames.OperDeleteSchedules);
-            m_CatOperNames.Add(CatalogOperation.ReadSchedules,
-               OperationNames.OperReadSchedules);
-            m_CatOperNames.Add(CatalogOperation.UpdateSchedules,
-               OperationNames.OperUpdateSchedules);
-            m_CatOperNames.Add(CatalogOperation.ListJobs,
-               OperationNames.OperListJobs);
-            m_CatOperNames.Add(CatalogOperation.CancelJobs,
-               OperationNames.OperCancelJobs);
-            m_CatOperNames.Add(CatalogOperation.ExecuteReportDefinition,
-             OperationNames.ExecuteReportDefinition);
+            m_CatOperNames.Add(CatalogOperation.CreateRoles, OperationNames.OperCreateRoles);
+            m_CatOperNames.Add(CatalogOperation.DeleteRoles, OperationNames.OperDeleteRoles);
+            m_CatOperNames.Add(CatalogOperation.ReadRoleProperties, OperationNames.OperReadRoleProperties);
+            m_CatOperNames.Add(CatalogOperation.UpdateRoleProperties, OperationNames.OperUpdateRoleProperties);
+            m_CatOperNames.Add(CatalogOperation.ReadSystemProperties, OperationNames.OperReadSystemProperties);
+            m_CatOperNames.Add(CatalogOperation.UpdateSystemProperties, OperationNames.OperUpdateSystemProperties);
+            m_CatOperNames.Add(CatalogOperation.GenerateEvents, OperationNames.OperGenerateEvents);
+            m_CatOperNames.Add(CatalogOperation.ReadSystemSecurityPolicy, OperationNames.OperReadSystemSecurityPolicy);
+            m_CatOperNames.Add(CatalogOperation.UpdateSystemSecurityPolicy, OperationNames.OperUpdateSystemSecurityPolicy);
+            m_CatOperNames.Add(CatalogOperation.CreateSchedules, OperationNames.OperCreateSchedules);
+            m_CatOperNames.Add(CatalogOperation.DeleteSchedules, OperationNames.OperDeleteSchedules);
+            m_CatOperNames.Add(CatalogOperation.ReadSchedules, OperationNames.OperReadSchedules);
+            m_CatOperNames.Add(CatalogOperation.UpdateSchedules, OperationNames.OperUpdateSchedules);
+            m_CatOperNames.Add(CatalogOperation.ListJobs, OperationNames.OperListJobs);
+            m_CatOperNames.Add(CatalogOperation.CancelJobs, OperationNames.OperCancelJobs);
+            m_CatOperNames.Add(CatalogOperation.ExecuteReportDefinition, OperationNames.ExecuteReportDefinition);
             if (m_CatOperNames.Count != NrCatOperations)
             {
                 //Catalog name mismatch
@@ -159,26 +131,16 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                  CustomSecurity.OperationNameError));
             }
 
-            m_FldOperNames.Add(FolderOperation.CreateFolder,
-               OperationNames.OperCreateFolder);
-            m_FldOperNames.Add(FolderOperation.Delete,
-               OperationNames.OperDelete);
-            m_FldOperNames.Add(FolderOperation.ReadProperties,
-               OperationNames.OperReadProperties);
-            m_FldOperNames.Add(FolderOperation.UpdateProperties,
-               OperationNames.OperUpdateProperties);
-            m_FldOperNames.Add(FolderOperation.CreateReport,
-               OperationNames.OperCreateReport);
-            m_FldOperNames.Add(FolderOperation.CreateResource,
-               OperationNames.OperCreateResource);
-            m_FldOperNames.Add(FolderOperation.ReadAuthorizationPolicy,
-               OperationNames.OperReadAuthorizationPolicy);
-            m_FldOperNames.Add(FolderOperation.UpdateDeleteAuthorizationPolicy,
-               OperationNames.OperUpdateDeleteAuthorizationPolicy);
-            m_FldOperNames.Add(FolderOperation.CreateDatasource,
-               OperationNames.OperCreateDatasource);
-            m_FldOperNames.Add(FolderOperation.CreateModel,
-               OperationNames.OperCreateModel);
+            m_FldOperNames.Add(FolderOperation.CreateFolder, OperationNames.OperCreateFolder);
+            m_FldOperNames.Add(FolderOperation.Delete, OperationNames.OperDelete);
+            m_FldOperNames.Add(FolderOperation.ReadProperties, OperationNames.OperReadProperties);
+            m_FldOperNames.Add(FolderOperation.UpdateProperties, OperationNames.OperUpdateProperties);
+            m_FldOperNames.Add(FolderOperation.CreateReport, OperationNames.OperCreateReport);
+            m_FldOperNames.Add(FolderOperation.CreateResource, OperationNames.OperCreateResource);
+            m_FldOperNames.Add(FolderOperation.ReadAuthorizationPolicy, OperationNames.OperReadAuthorizationPolicy);
+            m_FldOperNames.Add(FolderOperation.UpdateDeleteAuthorizationPolicy, OperationNames.OperUpdateDeleteAuthorizationPolicy);
+            m_FldOperNames.Add(FolderOperation.CreateDatasource, OperationNames.OperCreateDatasource);
+            m_FldOperNames.Add(FolderOperation.CreateModel, OperationNames.OperCreateModel);
             if (m_FldOperNames.Count != NrFldOperations)
             {
                 //Folder name mismatch
@@ -186,60 +148,33 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                  CustomSecurity.OperationNameError));
             }
 
-            m_RptOperNames.Add(ReportOperation.Delete,
-               OperationNames.OperDelete);
-            m_RptOperNames.Add(ReportOperation.ReadProperties,
-               OperationNames.OperReadProperties);
-            m_RptOperNames.Add(ReportOperation.UpdateProperties,
-               OperationNames.OperUpdateProperties);
-            m_RptOperNames.Add(ReportOperation.UpdateParameters,
-               OperationNames.OperUpdateParameters);
-            m_RptOperNames.Add(ReportOperation.ReadDatasource,
-               OperationNames.OperReadDatasources);
-            m_RptOperNames.Add(ReportOperation.UpdateDatasource,
-               OperationNames.OperUpdateDatasources);
-            m_RptOperNames.Add(ReportOperation.ReadReportDefinition,
-               OperationNames.OperReadReportDefinition);
-            m_RptOperNames.Add(ReportOperation.UpdateReportDefinition,
-               OperationNames.OperUpdateReportDefinition);
-            m_RptOperNames.Add(ReportOperation.CreateSubscription,
-               OperationNames.OperCreateSubscription);
-            m_RptOperNames.Add(ReportOperation.DeleteSubscription,
-               OperationNames.OperDeleteSubscription);
-            m_RptOperNames.Add(ReportOperation.ReadSubscription,
-               OperationNames.OperReadSubscription);
-            m_RptOperNames.Add(ReportOperation.UpdateSubscription,
-               OperationNames.OperUpdateSubscription);
-            m_RptOperNames.Add(ReportOperation.CreateAnySubscription,
-               OperationNames.OperCreateAnySubscription);
-            m_RptOperNames.Add(ReportOperation.DeleteAnySubscription,
-               OperationNames.OperDeleteAnySubscription);
-            m_RptOperNames.Add(ReportOperation.ReadAnySubscription,
-               OperationNames.OperReadAnySubscription);
-            m_RptOperNames.Add(ReportOperation.UpdateAnySubscription,
-               OperationNames.OperUpdateAnySubscription);
-            m_RptOperNames.Add(ReportOperation.UpdatePolicy,
-               OperationNames.OperUpdatePolicy);
-            m_RptOperNames.Add(ReportOperation.ReadPolicy,
-               OperationNames.OperReadPolicy);
-            m_RptOperNames.Add(ReportOperation.DeleteHistory,
-               OperationNames.OperDeleteHistory);
-            m_RptOperNames.Add(ReportOperation.ListHistory,
-               OperationNames.OperListHistory);
-            m_RptOperNames.Add(ReportOperation.ExecuteAndView,
-               OperationNames.OperExecuteAndView);
-            m_RptOperNames.Add(ReportOperation.CreateResource,
-               OperationNames.OperCreateResource);
-            m_RptOperNames.Add(ReportOperation.CreateSnapshot,
-               OperationNames.OperCreateSnapshot);
-            m_RptOperNames.Add(ReportOperation.ReadAuthorizationPolicy,
-               OperationNames.OperReadAuthorizationPolicy);
-            m_RptOperNames.Add(ReportOperation.UpdateDeleteAuthorizationPolicy,
-               OperationNames.OperUpdateDeleteAuthorizationPolicy);
-            m_RptOperNames.Add(ReportOperation.Execute,
-               OperationNames.OperExecute);
-            m_RptOperNames.Add(ReportOperation.CreateLink,
-               OperationNames.OperCreateLink);
+            m_RptOperNames.Add(ReportOperation.Delete, OperationNames.OperDelete);
+            m_RptOperNames.Add(ReportOperation.ReadProperties, OperationNames.OperReadProperties);
+            m_RptOperNames.Add(ReportOperation.UpdateProperties, OperationNames.OperUpdateProperties);
+            m_RptOperNames.Add(ReportOperation.UpdateParameters, OperationNames.OperUpdateParameters);
+            m_RptOperNames.Add(ReportOperation.ReadDatasource, OperationNames.OperReadDatasources);
+            m_RptOperNames.Add(ReportOperation.UpdateDatasource, OperationNames.OperUpdateDatasources);
+            m_RptOperNames.Add(ReportOperation.ReadReportDefinition, OperationNames.OperReadReportDefinition);
+            m_RptOperNames.Add(ReportOperation.UpdateReportDefinition, OperationNames.OperUpdateReportDefinition);
+            m_RptOperNames.Add(ReportOperation.CreateSubscription, OperationNames.OperCreateSubscription);
+            m_RptOperNames.Add(ReportOperation.DeleteSubscription, OperationNames.OperDeleteSubscription);
+            m_RptOperNames.Add(ReportOperation.ReadSubscription, OperationNames.OperReadSubscription);
+            m_RptOperNames.Add(ReportOperation.UpdateSubscription, OperationNames.OperUpdateSubscription);
+            m_RptOperNames.Add(ReportOperation.CreateAnySubscription, OperationNames.OperCreateAnySubscription);
+            m_RptOperNames.Add(ReportOperation.DeleteAnySubscription, OperationNames.OperDeleteAnySubscription);
+            m_RptOperNames.Add(ReportOperation.ReadAnySubscription, OperationNames.OperReadAnySubscription);
+            m_RptOperNames.Add(ReportOperation.UpdateAnySubscription, OperationNames.OperUpdateAnySubscription);
+            m_RptOperNames.Add(ReportOperation.UpdatePolicy, OperationNames.OperUpdatePolicy);
+            m_RptOperNames.Add(ReportOperation.ReadPolicy, OperationNames.OperReadPolicy);
+            m_RptOperNames.Add(ReportOperation.DeleteHistory, OperationNames.OperDeleteHistory);
+            m_RptOperNames.Add(ReportOperation.ListHistory, OperationNames.OperListHistory);
+            m_RptOperNames.Add(ReportOperation.ExecuteAndView, OperationNames.OperExecuteAndView);
+            m_RptOperNames.Add(ReportOperation.CreateResource, OperationNames.OperCreateResource);
+            m_RptOperNames.Add(ReportOperation.CreateSnapshot, OperationNames.OperCreateSnapshot);
+            m_RptOperNames.Add(ReportOperation.ReadAuthorizationPolicy, OperationNames.OperReadAuthorizationPolicy);
+            m_RptOperNames.Add(ReportOperation.UpdateDeleteAuthorizationPolicy, OperationNames.OperUpdateDeleteAuthorizationPolicy);
+            m_RptOperNames.Add(ReportOperation.Execute, OperationNames.OperExecute);
+            m_RptOperNames.Add(ReportOperation.CreateLink, OperationNames.OperCreateLink);
 
             if (m_RptOperNames.Count != NrRptOperations)
             {
@@ -248,20 +183,13 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                  CustomSecurity.OperationNameError));
             }
 
-            m_ResOperNames.Add(ResourceOperation.Delete,
-               OperationNames.OperDelete);
-            m_ResOperNames.Add(ResourceOperation.ReadProperties,
-               OperationNames.OperReadProperties);
-            m_ResOperNames.Add(ResourceOperation.UpdateProperties,
-               OperationNames.OperUpdateProperties);
-            m_ResOperNames.Add(ResourceOperation.ReadContent,
-               OperationNames.OperReadContent);
-            m_ResOperNames.Add(ResourceOperation.UpdateContent,
-               OperationNames.OperUpdateContent);
-            m_ResOperNames.Add(ResourceOperation.ReadAuthorizationPolicy,
-               OperationNames.OperReadAuthorizationPolicy);
-            m_ResOperNames.Add(ResourceOperation.UpdateDeleteAuthorizationPolicy,
-               OperationNames.OperUpdateDeleteAuthorizationPolicy);
+            m_ResOperNames.Add(ResourceOperation.Delete,OperationNames.OperDelete);
+            m_ResOperNames.Add(ResourceOperation.ReadProperties,OperationNames.OperReadProperties);
+            m_ResOperNames.Add(ResourceOperation.UpdateProperties,OperationNames.OperUpdateProperties);
+            m_ResOperNames.Add(ResourceOperation.ReadContent,OperationNames.OperReadContent);
+            m_ResOperNames.Add(ResourceOperation.UpdateContent,OperationNames.OperUpdateContent);
+            m_ResOperNames.Add(ResourceOperation.ReadAuthorizationPolicy,OperationNames.OperReadAuthorizationPolicy);
+            m_ResOperNames.Add(ResourceOperation.UpdateDeleteAuthorizationPolicy,OperationNames.OperUpdateDeleteAuthorizationPolicy);
 
             if (m_ResOperNames.Count != NrResOperations)
             {
@@ -270,20 +198,13 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                  CustomSecurity.OperationNameError));
             }
 
-            m_DSOperNames.Add(DatasourceOperation.Delete,
-               OperationNames.OperDelete);
-            m_DSOperNames.Add(DatasourceOperation.ReadProperties,
-               OperationNames.OperReadProperties);
-            m_DSOperNames.Add(DatasourceOperation.UpdateProperties,
-               OperationNames.OperUpdateProperties);
-            m_DSOperNames.Add(DatasourceOperation.ReadContent,
-               OperationNames.OperReadContent);
-            m_DSOperNames.Add(DatasourceOperation.UpdateContent,
-               OperationNames.OperUpdateContent);
-            m_DSOperNames.Add(DatasourceOperation.ReadAuthorizationPolicy,
-               OperationNames.OperReadAuthorizationPolicy);
-            m_DSOperNames.Add(DatasourceOperation.UpdateDeleteAuthorizationPolicy,
-               OperationNames.OperUpdateDeleteAuthorizationPolicy);
+            m_DSOperNames.Add(DatasourceOperation.Delete,OperationNames.OperDelete);
+            m_DSOperNames.Add(DatasourceOperation.ReadProperties,OperationNames.OperReadProperties);
+            m_DSOperNames.Add(DatasourceOperation.UpdateProperties,OperationNames.OperUpdateProperties);
+            m_DSOperNames.Add(DatasourceOperation.ReadContent,OperationNames.OperReadContent);
+            m_DSOperNames.Add(DatasourceOperation.UpdateContent,OperationNames.OperUpdateContent);
+            m_DSOperNames.Add(DatasourceOperation.ReadAuthorizationPolicy,OperationNames.OperReadAuthorizationPolicy);
+            m_DSOperNames.Add(DatasourceOperation.UpdateDeleteAuthorizationPolicy,OperationNames.OperUpdateDeleteAuthorizationPolicy);
 
             if (m_DSOperNames.Count != NrDSOperations)
             {

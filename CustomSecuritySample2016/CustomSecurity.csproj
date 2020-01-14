@@ -110,6 +110,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal\Microsoft.ReportingServices.Authorization.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ReportingServices.Exceptions, Version=2019.9.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\Microsoft.ReportingServices.Exceptions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ReportingServices.Interfaces">
       <HintPath>D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin\Microsoft.ReportingServices.Interfaces.dll</HintPath>
     </Reference>
@@ -166,6 +170,7 @@
     <Compile Include="NLogHelper.cs" />
     <Compile Include="CepOneDbContext.cs" />
     <Compile Include="RSDbContext.cs" />
+    <Compile Include="RsSoapExtensionReflector.cs" />
     <Compile Include="SessionInfo.cs" />
     <Compile Include="SessionUser.cs" />
     <Compile Include="SqlHelper.cs" />
@@ -306,9 +311,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Content Include="Catalog.sql" />
+    <Content Include="CatalogTempDB.sql" />
     <Content Include="dlls\EntityFramework.dll" />
     <Content Include="dlls\EntityFramework.SqlServer.dll" />
     <Content Include="dlls\Microsoft.ReportingServices.Authorization.dll" />
+    <Content Include="dlls\Microsoft.ReportingServices.Exceptions.dll" />
     <Content Include="dlls\Microsoft.ReportingServices.Interfaces.dll" />
     <Content Include="dlls\NLog.dll" />
     <Content Include="dlls\ReportingServicesLibrary.dll" />
@@ -457,6 +465,7 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="WindowsAuth\RSPortal.exe.config" />
+    <None Include="WindowsAuth\RSPowerBI.exe.config" />
     <None Include="WindowsAuth\rsreportserver.config" />
     <None Include="WindowsAuth\rssrvpolicy.config" />
     <None Include="WindowsAuth\web.config" />
@@ -511,6 +520,8 @@
     <PostBuildEvent>Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 Copy /Y "$(ProjectDir)\FormsAuth\ReportingServicesService.exe.config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
+Copy /Y "$(TargetDir)EntityFramework.dll" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
+Copy /Y "$(TargetDir)EntityFramework.SqlServer.dll" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 
 Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
 Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
