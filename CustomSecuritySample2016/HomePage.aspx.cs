@@ -56,8 +56,8 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                     securitycode = !RedisHelper.Exists(session_info) ? Request["code"] : RedisHelper.Get<string>(session_code);
                     //获取token
                     SSOAccessToken token = GetAccessToken();
-                    int accountId = 0;
-                    if (token != null&& int.TryParse(token.OpenId,out accountId))
+                    long accountId = 0;
+                    if (token != null&& long.TryParse(token.OpenId,out accountId))
                     {
                         SessionUser sessionUser = SqlHelper.GetUserInfoByAccount(accountId);
                         SessionInfo sessionInfo = new SessionInfo(token, sessionUser);

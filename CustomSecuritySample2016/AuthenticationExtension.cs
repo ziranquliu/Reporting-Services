@@ -28,7 +28,6 @@ using Microsoft.ReportingServices.Interfaces;
 
 namespace Microsoft.Samples.ReportingServices.CustomSecurity
 {
-
     public class AuthenticationExtension : IAuthenticationExtension2, IExtension
     {
         /// <summary>
@@ -67,7 +66,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public bool LogonUser(string userName, string password, string authority)
         {
-            return AuthenticationUtilities.VerifyPassword(userName, password);
+            return true;
         }
 
         /// <summary>

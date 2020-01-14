@@ -15,7 +15,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         // 定义一个标识确保线程同步
         private static readonly object padlock = new object();
 
-        private CepOneDbContext() : base("name=ReportServer")
+        private CepOneDbContext() : base("name=CepOne")
         {
 
         }

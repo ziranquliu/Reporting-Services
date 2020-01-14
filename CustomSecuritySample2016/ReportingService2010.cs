@@ -277,7 +277,7 @@ namespace Microsoft.SqlServer.ReportingServices2010 {
         
         /// <remarks/>
         public ReportingService2010() {
-            this.Url = "http://localhost:80/ReportServer_SQL2016/ReportService2010.asmx";
+            this.Url = "http://localhost:80/ReportServer/ReportService2010.asmx";
         }
         
         public TrustedUserHeader TrustedUserHeaderValue {

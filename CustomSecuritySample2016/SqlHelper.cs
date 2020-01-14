@@ -39,12 +39,12 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
 							MD.FullName,
                             SO.Id AS OrgId,
                             SO.Name AS OrgName
-                        FROM MdmEmployee ME
-                        LEFT JOIN SysOrg SO ON ME.OrgId = SO.Id
-                        LEFT JOIN MdmDealer MD ON MD.DealerCode = SO.DealerCode
-						LEFT JOIN UsAccount UA ON UA.Id=ME.AccountId";
+                        FROM dbo.MdmEmployee ME
+                        LEFT JOIN dbo.SysOrg SO ON ME.OrgId = SO.Id
+                        LEFT JOIN dbo.MdmDealer MD ON MD.DealerCode = SO.DealerCode
+						LEFT JOIN dbo.UsAccount UA ON UA.Id=ME.AccountId";
 
-        internal static SessionUser GetUserInfoByAccount(int accountId)
+        internal static SessionUser GetUserInfoByAccount(long accountId)
         {
             string sql = String.Format("{0} WHERE ME.AccountId = '{1}'", SqlGetUserInfo, accountId);
             SessionUser sessionUser = DbCepOne.SqlQuery<SessionUser>(sql).FirstOrDefault();
