@@ -32,234 +32,31 @@ using Microsoft.ReportingServices.Interfaces;
 using System.Xml;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
+using NLog;
+using System.Web;
+using System.Security.Principal;
 
 namespace Microsoft.Samples.ReportingServices.CustomSecurity
 {
     public class AuthorizationExtension : IAuthorizationExtension, IExtension
     {
         private static string m_adminUserName;
-
-        private static readonly Dictionary<ModelItemOperation, string> m_ModelItemOperNames;
-        private static readonly Dictionary<ModelOperation, string> m_ModelOperNames;
-        private static readonly Dictionary<CatalogOperation, string> m_CatOperNames;
-        private static readonly Dictionary<FolderOperation, string> m_FldOperNames;
-        private static readonly Dictionary<ReportOperation, string> m_RptOperNames;
-        private static readonly Dictionary<ResourceOperation, string> m_ResOperNames;
-        private static readonly Dictionary<DatasourceOperation, string> m_DSOperNames;
-
-        private const int NrRptOperations = 27;
-        private const int NrFldOperations = 10;
-        private const int NrResOperations = 7;
-        private const int NrDSOperations = 7;
-        private const int NrCatOperations = 16;
-        private const int NrModelOperations = 11;
-        private const int NrModelItemOperations = 1;
-
-        private static readonly List<string> _fullPermissions;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger(typeof(AuthorizationExtension));
+        private static readonly List<BiOper> BiOpers = new List<BiOper>();
+        private static readonly List<BiUserOper> BiUserOpers = new List<BiUserOper>();
 
         static AuthorizationExtension()
         {
-            m_ModelItemOperNames = new Dictionary<ModelItemOperation, string>();
-            m_ModelOperNames = new Dictionary<ModelOperation, string>();
-            m_CatOperNames = new Dictionary<CatalogOperation, string>();
-            m_FldOperNames = new Dictionary<FolderOperation, string>();
-            m_RptOperNames = new Dictionary<ReportOperation, string>();
-            m_ResOperNames = new Dictionary<ResourceOperation, string>();
-            m_DSOperNames = new Dictionary<DatasourceOperation, string>();
-            _fullPermissions = new List<string>();
-
-            InitializeMaps();
-        }
-
-        // Utility method used to create mappings to the various
-        // operations in Reporting Services. These mappings support
-        // the implementation of the GetPermissions method.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
-        private static void InitializeMaps()
-        {
-            // create model operation names data
-            m_ModelItemOperNames.Add(ModelItemOperation.ReadProperties, OperationNames.OperReadProperties);
-
-            if (m_ModelItemOperNames.Count != NrModelItemOperations)
+            try
             {
-                //Model item name mismatch
-                throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                    CustomSecurity.OperationNameError));
+                BiOpers = SqlHelper.DbRSInstance.BiOpers.AsQueryable().ToList();
+                BiUserOpers = SqlHelper.DbRSInstance.BiUserOpers.AsQueryable().ToList();
             }
-
-            // create model operation names data
-            m_ModelOperNames.Add(ModelOperation.Delete, OperationNames.OperDelete);
-            m_ModelOperNames.Add(ModelOperation.ReadAuthorizationPolicy, OperationNames.OperReadAuthorizationPolicy);
-            m_ModelOperNames.Add(ModelOperation.ReadContent, OperationNames.OperReadContent);
-            m_ModelOperNames.Add(ModelOperation.ReadDatasource, OperationNames.OperReadDatasources);
-            m_ModelOperNames.Add(ModelOperation.ReadModelItemAuthorizationPolicies, OperationNames.OperReadModelItemSecurityPolicies);
-            m_ModelOperNames.Add(ModelOperation.ReadProperties, OperationNames.OperReadProperties);
-            m_ModelOperNames.Add(ModelOperation.UpdateContent, OperationNames.OperUpdateContent);
-            m_ModelOperNames.Add(ModelOperation.UpdateDatasource, OperationNames.OperUpdateDatasources);
-            m_ModelOperNames.Add(ModelOperation.UpdateDeleteAuthorizationPolicy, OperationNames.OperUpdateDeleteAuthorizationPolicy);
-            m_ModelOperNames.Add(ModelOperation.UpdateModelItemAuthorizationPolicies, OperationNames.OperUpdateModelItemSecurityPolicies);
-            m_ModelOperNames.Add(ModelOperation.UpdateProperties, OperationNames.OperUpdatePolicy);
-
-            if (m_ModelOperNames.Count != NrModelOperations)
+            catch (Exception ex)
             {
-                //Model name mismatch
-                throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                   CustomSecurity.OperationNameError));
-            }
-
-            // create operation names data
-            m_CatOperNames.Add(CatalogOperation.CreateRoles, OperationNames.OperCreateRoles);
-            m_CatOperNames.Add(CatalogOperation.DeleteRoles, OperationNames.OperDeleteRoles);
-            m_CatOperNames.Add(CatalogOperation.ReadRoleProperties, OperationNames.OperReadRoleProperties);
-            m_CatOperNames.Add(CatalogOperation.UpdateRoleProperties, OperationNames.OperUpdateRoleProperties);
-            m_CatOperNames.Add(CatalogOperation.ReadSystemProperties, OperationNames.OperReadSystemProperties);
-            m_CatOperNames.Add(CatalogOperation.UpdateSystemProperties, OperationNames.OperUpdateSystemProperties);
-            m_CatOperNames.Add(CatalogOperation.GenerateEvents, OperationNames.OperGenerateEvents);
-            m_CatOperNames.Add(CatalogOperation.ReadSystemSecurityPolicy, OperationNames.OperReadSystemSecurityPolicy);
-            m_CatOperNames.Add(CatalogOperation.UpdateSystemSecurityPolicy, OperationNames.OperUpdateSystemSecurityPolicy);
-            m_CatOperNames.Add(CatalogOperation.CreateSchedules, OperationNames.OperCreateSchedules);
-            m_CatOperNames.Add(CatalogOperation.DeleteSchedules, OperationNames.OperDeleteSchedules);
-            m_CatOperNames.Add(CatalogOperation.ReadSchedules, OperationNames.OperReadSchedules);
-            m_CatOperNames.Add(CatalogOperation.UpdateSchedules, OperationNames.OperUpdateSchedules);
-            m_CatOperNames.Add(CatalogOperation.ListJobs, OperationNames.OperListJobs);
-            m_CatOperNames.Add(CatalogOperation.CancelJobs, OperationNames.OperCancelJobs);
-            m_CatOperNames.Add(CatalogOperation.ExecuteReportDefinition, OperationNames.ExecuteReportDefinition);
-            if (m_CatOperNames.Count != NrCatOperations)
-            {
-                //Catalog name mismatch
-                throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                 CustomSecurity.OperationNameError));
-            }
-
-            m_FldOperNames.Add(FolderOperation.CreateFolder, OperationNames.OperCreateFolder);
-            m_FldOperNames.Add(FolderOperation.Delete, OperationNames.OperDelete);
-            m_FldOperNames.Add(FolderOperation.ReadProperties, OperationNames.OperReadProperties);
-            m_FldOperNames.Add(FolderOperation.UpdateProperties, OperationNames.OperUpdateProperties);
-            m_FldOperNames.Add(FolderOperation.CreateReport, OperationNames.OperCreateReport);
-            m_FldOperNames.Add(FolderOperation.CreateResource, OperationNames.OperCreateResource);
-            m_FldOperNames.Add(FolderOperation.ReadAuthorizationPolicy, OperationNames.OperReadAuthorizationPolicy);
-            m_FldOperNames.Add(FolderOperation.UpdateDeleteAuthorizationPolicy, OperationNames.OperUpdateDeleteAuthorizationPolicy);
-            m_FldOperNames.Add(FolderOperation.CreateDatasource, OperationNames.OperCreateDatasource);
-            m_FldOperNames.Add(FolderOperation.CreateModel, OperationNames.OperCreateModel);
-            if (m_FldOperNames.Count != NrFldOperations)
-            {
-                //Folder name mismatch
-                throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                 CustomSecurity.OperationNameError));
-            }
-
-            m_RptOperNames.Add(ReportOperation.Delete, OperationNames.OperDelete);
-            m_RptOperNames.Add(ReportOperation.ReadProperties, OperationNames.OperReadProperties);
-            m_RptOperNames.Add(ReportOperation.UpdateProperties, OperationNames.OperUpdateProperties);
-            m_RptOperNames.Add(ReportOperation.UpdateParameters, OperationNames.OperUpdateParameters);
-            m_RptOperNames.Add(ReportOperation.ReadDatasource, OperationNames.OperReadDatasources);
-            m_RptOperNames.Add(ReportOperation.UpdateDatasource, OperationNames.OperUpdateDatasources);
-            m_RptOperNames.Add(ReportOperation.ReadReportDefinition, OperationNames.OperReadReportDefinition);
-            m_RptOperNames.Add(ReportOperation.UpdateReportDefinition, OperationNames.OperUpdateReportDefinition);
-            m_RptOperNames.Add(ReportOperation.CreateSubscription, OperationNames.OperCreateSubscription);
-            m_RptOperNames.Add(ReportOperation.DeleteSubscription, OperationNames.OperDeleteSubscription);
-            m_RptOperNames.Add(ReportOperation.ReadSubscription, OperationNames.OperReadSubscription);
-            m_RptOperNames.Add(ReportOperation.UpdateSubscription, OperationNames.OperUpdateSubscription);
-            m_RptOperNames.Add(ReportOperation.CreateAnySubscription, OperationNames.OperCreateAnySubscription);
-            m_RptOperNames.Add(ReportOperation.DeleteAnySubscription, OperationNames.OperDeleteAnySubscription);
-            m_RptOperNames.Add(ReportOperation.ReadAnySubscription, OperationNames.OperReadAnySubscription);
-            m_RptOperNames.Add(ReportOperation.UpdateAnySubscription, OperationNames.OperUpdateAnySubscription);
-            m_RptOperNames.Add(ReportOperation.UpdatePolicy, OperationNames.OperUpdatePolicy);
-            m_RptOperNames.Add(ReportOperation.ReadPolicy, OperationNames.OperReadPolicy);
-            m_RptOperNames.Add(ReportOperation.DeleteHistory, OperationNames.OperDeleteHistory);
-            m_RptOperNames.Add(ReportOperation.ListHistory, OperationNames.OperListHistory);
-            m_RptOperNames.Add(ReportOperation.ExecuteAndView, OperationNames.OperExecuteAndView);
-            m_RptOperNames.Add(ReportOperation.CreateResource, OperationNames.OperCreateResource);
-            m_RptOperNames.Add(ReportOperation.CreateSnapshot, OperationNames.OperCreateSnapshot);
-            m_RptOperNames.Add(ReportOperation.ReadAuthorizationPolicy, OperationNames.OperReadAuthorizationPolicy);
-            m_RptOperNames.Add(ReportOperation.UpdateDeleteAuthorizationPolicy, OperationNames.OperUpdateDeleteAuthorizationPolicy);
-            m_RptOperNames.Add(ReportOperation.Execute, OperationNames.OperExecute);
-            m_RptOperNames.Add(ReportOperation.CreateLink, OperationNames.OperCreateLink);
-
-            if (m_RptOperNames.Count != NrRptOperations)
-            {
-                //Report name mismatch
-                throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                 CustomSecurity.OperationNameError));
-            }
-
-            m_ResOperNames.Add(ResourceOperation.Delete,OperationNames.OperDelete);
-            m_ResOperNames.Add(ResourceOperation.ReadProperties,OperationNames.OperReadProperties);
-            m_ResOperNames.Add(ResourceOperation.UpdateProperties,OperationNames.OperUpdateProperties);
-            m_ResOperNames.Add(ResourceOperation.ReadContent,OperationNames.OperReadContent);
-            m_ResOperNames.Add(ResourceOperation.UpdateContent,OperationNames.OperUpdateContent);
-            m_ResOperNames.Add(ResourceOperation.ReadAuthorizationPolicy,OperationNames.OperReadAuthorizationPolicy);
-            m_ResOperNames.Add(ResourceOperation.UpdateDeleteAuthorizationPolicy,OperationNames.OperUpdateDeleteAuthorizationPolicy);
-
-            if (m_ResOperNames.Count != NrResOperations)
-            {
-                //Resource name mismatch
-                throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                 CustomSecurity.OperationNameError));
-            }
-
-            m_DSOperNames.Add(DatasourceOperation.Delete,OperationNames.OperDelete);
-            m_DSOperNames.Add(DatasourceOperation.ReadProperties,OperationNames.OperReadProperties);
-            m_DSOperNames.Add(DatasourceOperation.UpdateProperties,OperationNames.OperUpdateProperties);
-            m_DSOperNames.Add(DatasourceOperation.ReadContent,OperationNames.OperReadContent);
-            m_DSOperNames.Add(DatasourceOperation.UpdateContent,OperationNames.OperUpdateContent);
-            m_DSOperNames.Add(DatasourceOperation.ReadAuthorizationPolicy,OperationNames.OperReadAuthorizationPolicy);
-            m_DSOperNames.Add(DatasourceOperation.UpdateDeleteAuthorizationPolicy,OperationNames.OperUpdateDeleteAuthorizationPolicy);
-
-            if (m_DSOperNames.Count != NrDSOperations)
-            {
-                //Datasource name mismatch
-                throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                 CustomSecurity.OperationNameError));
-            }
-            foreach (CatalogOperation current in m_CatOperNames.Keys)
-            {
-                if (!_fullPermissions.Contains(m_CatOperNames[current]))
-                {
-                    _fullPermissions.Add(m_CatOperNames[current]);
-                }
-            }
-            foreach (ModelItemOperation current2 in m_ModelItemOperNames.Keys)
-            {
-                if (!_fullPermissions.Contains(m_ModelItemOperNames[current2]))
-                {
-                    _fullPermissions.Add(m_ModelItemOperNames[current2]);
-                }
-            }
-            foreach (ModelOperation current3 in m_ModelOperNames.Keys)
-            {
-                if (!_fullPermissions.Contains(m_ModelOperNames[current3]))
-                {
-                    _fullPermissions.Add(m_ModelOperNames[current3]);
-                }
-            }
-            foreach (ReportOperation current4 in m_RptOperNames.Keys)
-            {
-                if (!_fullPermissions.Contains(m_RptOperNames[current4]))
-                {
-                    _fullPermissions.Add(m_RptOperNames[current4]);
-                }
-            }
-            foreach (FolderOperation current5 in m_FldOperNames.Keys)
-            {
-                if (!_fullPermissions.Contains(m_FldOperNames[current5]))
-                {
-                    _fullPermissions.Add(m_FldOperNames[current5]);
-                }
-            }
-            foreach (ResourceOperation current6 in m_ResOperNames.Keys)
-            {
-                if (!_fullPermissions.Contains(m_ResOperNames[current6]))
-                {
-                    _fullPermissions.Add(m_ResOperNames[current6]);
-                }
-            }
-            foreach (DatasourceOperation current7 in m_DSOperNames.Keys)
-            {
-                if (!_fullPermissions.Contains(m_DSOperNames[current7]))
-                {
-                    _fullPermissions.Add(m_DSOperNames[current7]);
-                }
+                logger.ErrorEx(new Exception("初始化权限列表失败！", ex));
+                throw ex;
             }
         }
 
@@ -597,54 +394,12 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             StringCollection permissions = new StringCollection();
             if (IsAdmin(userName))
             {
-                permissions.AddRange(_fullPermissions.ToArray());
+                permissions.AddRange(BiOpers.Select(item => item.OperationDesc).ToArray());
             }
             else
             {
-                AceCollection acl = DeserializeAcl(secDesc);
-                foreach (AceStruct ace in acl)
-                {
-                    if (0 == String.Compare(userName, ace.PrincipalName, true,
-                          CultureInfo.CurrentCulture))
-                    {
-                        foreach (ModelItemOperation aclOperation in ace.ModelItemOperations)
-                        {
-                            if (!permissions.Contains((string)m_ModelItemOperNames[aclOperation]))
-                                permissions.Add((string)m_ModelItemOperNames[aclOperation]);
-                        }
-                        foreach (ModelOperation aclOperation in ace.ModelOperations)
-                        {
-                            if (!permissions.Contains((string)m_ModelOperNames[aclOperation]))
-                                permissions.Add((string)m_ModelOperNames[aclOperation]);
-                        }
-                        foreach (CatalogOperation aclOperation in
-                           ace.CatalogOperations)
-                        {
-                            if (!permissions.Contains((string)m_CatOperNames[aclOperation]))
-                                permissions.Add((string)m_CatOperNames[aclOperation]);
-                        }
-                        foreach (ReportOperation aclOperation in ace.ReportOperations)
-                        {
-                            if (!permissions.Contains((string)m_RptOperNames[aclOperation]))
-                                permissions.Add((string)m_RptOperNames[aclOperation]);
-                        }
-                        foreach (FolderOperation aclOperation in ace.FolderOperations)
-                        {
-                            if (!permissions.Contains((string)m_FldOperNames[aclOperation]))
-                                permissions.Add((string)m_FldOperNames[aclOperation]);
-                        }
-                        foreach (ResourceOperation aclOperation in ace.ResourceOperations)
-                        {
-                            if (!permissions.Contains((string)m_ResOperNames[aclOperation]))
-                                permissions.Add((string)m_ResOperNames[aclOperation]);
-                        }
-                        foreach (DatasourceOperation aclOperation in ace.DatasourceOperations)
-                        {
-                            if (!permissions.Contains((string)m_DSOperNames[aclOperation]))
-                                permissions.Add((string)m_DSOperNames[aclOperation]);
-                        }
-                    }
-                }
+                permissions.AddRange(BiUserOpers.Where(item => 0 == String.Compare(userName, item.User.UserName, true, CultureInfo.CurrentCulture))
+                    .Select(item => item.BiOper.OperationDesc).ToArray());
             }
 
             return permissions;
@@ -669,6 +424,8 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
 
         private byte[] SerializeAcl(AceCollection acl, out string stringSecDesc)
         {
+            SqlHelper.DbRSInstance.SaveAcl(acl);
+
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             byte[] buffer;
             using (MemoryStream memoryStream = new MemoryStream())

@@ -138,6 +138,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
@@ -150,6 +151,7 @@
     <Reference Include="System.Management">
       <Name>System.Management</Name>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web">
       <Name>System.Web</Name>
     </Reference>
@@ -171,6 +173,9 @@
     <Compile Include="Commons\NLogHelper.cs" />
     <Compile Include="Data\CepOneDbContext.cs" />
     <Compile Include="Data\RSDbContext.cs" />
+    <Compile Include="Models\BiOper.cs" />
+    <Compile Include="Models\BiUserOper.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="RsSoapExtensionReflector.cs" />
     <Compile Include="Models\SessionInfo.cs" />
     <Compile Include="Models\SessionUser.cs" />
@@ -513,7 +518,9 @@
       <CachedSettingsPropName>Microsoft_Samples_ReportingServices_CustomSecurity_localhost_ReportingService2010</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>net stop PowerBIReportServer</PreBuildEvent>
@@ -522,6 +529,7 @@ Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI R
 Copy /Y "$(ProjectDir)\FormsAuth\ReportingServicesService.exe.config" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 Copy /Y "$(TargetDir)EntityFramework.dll" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 Copy /Y "$(TargetDir)EntityFramework.SqlServer.dll" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
+Copy /Y "$(TargetDir)Microsoft.SqlServer.Types.dll" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\ReportServer\bin"
 
 Copy /Y "$(TargetDir)$(TargetName)$(TargetExt)" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"
 Copy /Y "$(TargetDir)$(TargetName).pdb" "D:\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\PowerBI"

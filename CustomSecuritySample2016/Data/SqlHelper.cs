@@ -18,12 +18,19 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                 return CepOneDbContext.GetInstance().Database;
             }
         }
+        internal static RSDbContext DbRSInstance
+        {
+            get
+            {
+                return RSDbContext.GetInstance();
+            }
+        }
 
         internal static Database DbRS
         {
             get
             {
-                return RSDbContext.GetInstance().Database;
+                return DbRSInstance.Database;
             }
         }
 
