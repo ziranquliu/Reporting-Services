@@ -283,15 +283,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
           SecurityItemType itemType,
           out string stringSecDesc)
         {
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            byte[] buffer;
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                binaryFormatter.Serialize(memoryStream, acl);
-                stringSecDesc = JsonConvert.SerializeObject(acl);
-                buffer = memoryStream.GetBuffer();
-            }
-            return buffer;
+            return SerializeAcl(acl, out stringSecDesc);
         }
 
         public bool CheckAccess(
@@ -673,6 +665,19 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                 }
             }
             return acl;
+        }
+
+        private byte[] SerializeAcl(AceCollection acl, out string stringSecDesc)
+        {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            byte[] buffer;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                binaryFormatter.Serialize(memoryStream, acl);
+                stringSecDesc = JsonConvert.SerializeObject(acl);
+                buffer = memoryStream.GetBuffer();
+            }
+            return buffer;
         }
 
         /// <summary>
