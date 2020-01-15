@@ -7,26 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.Samples.ReportingServices.CustomSecurity
+namespace Microsoft.Samples.ReportingServices.CustomSecurity.Data
 {
-    class RSDbContext : DbContext
+    partial class ReportServerEntities
     {
         // 定义一个静态变量来保存类的实例
-        private static RSDbContext instance = null;
+        private static ReportServerEntities instance = null;
 
         // 定义一个标识确保线程同步
         private static readonly object padlock = new object();
 
-        private RSDbContext() : base("name=ReportServer")
-        {
-
-        }
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            //throw new UnintentionalCodeFirstException();
-        }
-
-        public static RSDbContext GetInstance()
+        public static ReportServerEntities GetInstance()
         {
             // 当第一个线程运行到这里时，此时会对locker对象 "加锁"，
             // 当第二个线程运行该方法时，首先检测到locker对象为"加锁"状态，该线程就会挂起等待第一个线程解锁
@@ -38,16 +29,12 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                     // 如果类的实例不存在则创建，否则直接返回
                     if (instance == null)
                     {
-                        instance = new RSDbContext();
+                        instance = new ReportServerEntities();
                     }
                 }
             }
             return instance;
         }
-
-        public virtual DbSet<BiOper> BiOpers { get; set; }
-        public virtual DbSet<BiUserOper> BiUserOpers { get; set; }
-        public virtual DbSet<User> Users { get; set; }
 
         internal void SaveAcl(AceCollection acl)
         {
@@ -70,37 +57,37 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                     List<Guid> lstOpers = new List<Guid>();
                     foreach (CatalogOperation catalogOperation in ace.CatalogOperations)
                     {
-                        Guid OperId = BiOpers.First(item => item.OperType == OperType.CatalogOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
+                        Guid OperId = BiOpers.First(item => item.OperType == (int)OperType.CatalogOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
                         lstOpers.Add(OperId);
                     }
                     foreach (DatasourceOperation catalogOperation in ace.DatasourceOperations)
                     {
-                        Guid OperId = BiOpers.First(item => item.OperType == OperType.DatasourceOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
+                        Guid OperId = BiOpers.First(item => item.OperType == (int)OperType.DatasourceOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
                         lstOpers.Add(OperId);
                     }
                     foreach (FolderOperation catalogOperation in ace.FolderOperations)
                     {
-                        Guid OperId = BiOpers.First(item => item.OperType == OperType.FolderOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
+                        Guid OperId = BiOpers.First(item => item.OperType == (int)OperType.FolderOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
                         lstOpers.Add(OperId);
                     }
                     foreach (ModelItemOperation catalogOperation in ace.ModelItemOperations)
                     {
-                        Guid OperId = BiOpers.First(item => item.OperType == OperType.ModelItemOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
+                        Guid OperId = BiOpers.First(item => item.OperType == (int)OperType.ModelItemOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
                         lstOpers.Add(OperId);
                     }
                     foreach (ModelOperation catalogOperation in ace.ModelOperations)
                     {
-                        Guid OperId = BiOpers.First(item => item.OperType == OperType.ModelOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
+                        Guid OperId = BiOpers.First(item => item.OperType == (int)OperType.ModelOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
                         lstOpers.Add(OperId);
                     }
                     foreach (ReportOperation catalogOperation in ace.ReportOperations)
                     {
-                        Guid OperId = BiOpers.First(item => item.OperType == OperType.ReportOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
+                        Guid OperId = BiOpers.First(item => item.OperType == (int)OperType.ReportOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
                         lstOpers.Add(OperId);
                     }
                     foreach (ResourceOperation catalogOperation in ace.ResourceOperations)
                     {
-                        Guid OperId = BiOpers.First(item => item.OperType == OperType.ResourceOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
+                        Guid OperId = BiOpers.First(item => item.OperType == (int)OperType.ResourceOperation && item.OperTypeDesc == catalogOperation.ToString()).OperId;
                         lstOpers.Add(OperId);
                     }
                     this.Database.ExecuteSqlCommand("delete from [dbo].[BiUserOpers] where [UserId]='" + user.UserID + "'");
@@ -108,6 +95,12 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                     this.SaveChanges();
                 }
             }
+        }
+
+        internal int ClearAcl(string userEmail)
+        {
+            string sql = "delete from [dbo].[BiUserOpers] where [UserId]=(select TOP 1 [UserId] from [dbo].[Users] where UserName='" + userEmail + "')";
+            return this.Database.ExecuteSqlCommand(sql);
         }
     }
 }

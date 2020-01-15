@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ReportServerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BiOpers">
+          <Key>
+            <PropertyRef Name="OperId" />
+          </Key>
+          <Property Name="OperId" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="OperType" Type="int" Nullable="false" />
+          <Property Name="OperTypeName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="OperTypeDesc" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OperationName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OperationDesc" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BiUserOpers">
+          <Key>
+            <PropertyRef Name="RelationId" />
+          </Key>
+          <Property Name="RelationId" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="OperId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Sid" Type="varbinary" MaxLength="85" />
+          <Property Name="UserType" Type="int" Nullable="false" />
+          <Property Name="AuthType" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="260" />
+          <Property Name="ServiceToken" Type="ntext" />
+          <Property Name="Setting" Type="ntext" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_BiUserOpers_BiOpers">
+          <End Role="BiOpers" Type="Self.BiOpers" Multiplicity="1" />
+          <End Role="BiUserOpers" Type="Self.BiUserOpers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BiOpers">
+              <PropertyRef Name="OperId" />
+            </Principal>
+            <Dependent Role="BiUserOpers">
+              <PropertyRef Name="OperId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BiUserOpers_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="BiUserOpers" Type="Self.BiUserOpers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="BiUserOpers">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReportServerModelStoreContainer">
+          <EntitySet Name="BiOpers" EntityType="Self.BiOpers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BiUserOpers" EntityType="Self.BiUserOpers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_BiUserOpers_BiOpers" Association="Self.FK_BiUserOpers_BiOpers">
+            <End Role="BiOpers" EntitySet="BiOpers" />
+            <End Role="BiUserOpers" EntitySet="BiUserOpers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BiUserOpers_Users" Association="Self.FK_BiUserOpers_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="BiUserOpers" EntitySet="BiUserOpers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ReportServerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BiOper">
+          <Key>
+            <PropertyRef Name="OperId" />
+          </Key>
+          <Property Name="OperId" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OperType" Type="Int32" Nullable="false" />
+          <Property Name="OperTypeName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OperTypeDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OperationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OperationDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="BiUserOpers" Relationship="Self.FK_BiUserOpers_BiOpers" FromRole="BiOpers" ToRole="BiUserOpers" />
+        </EntityType>
+        <EntityType Name="BiUserOper">
+          <Key>
+            <PropertyRef Name="RelationId" />
+          </Key>
+          <Property Name="RelationId" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="OperId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="BiOper" Relationship="Self.FK_BiUserOpers_BiOpers" FromRole="BiUserOpers" ToRole="BiOpers" />
+          <NavigationProperty Name="User" Relationship="Self.FK_BiUserOpers_Users" FromRole="BiUserOpers" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sid" Type="Binary" MaxLength="85" FixedLength="false" />
+          <Property Name="UserType" Type="Int32" Nullable="false" />
+          <Property Name="AuthType" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="260" FixedLength="false" Unicode="true" />
+          <Property Name="ServiceToken" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Setting" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="BiUserOpers" Relationship="Self.FK_BiUserOpers_Users" FromRole="Users" ToRole="BiUserOpers" />
+        </EntityType>
+        <Association Name="FK_BiUserOpers_BiOpers">
+          <End Role="BiOpers" Type="Self.BiOper" Multiplicity="1" />
+          <End Role="BiUserOpers" Type="Self.BiUserOper" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BiOpers">
+              <PropertyRef Name="OperId" />
+            </Principal>
+            <Dependent Role="BiUserOpers">
+              <PropertyRef Name="OperId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BiUserOpers_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="BiUserOpers" Type="Self.BiUserOper" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="BiUserOpers">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReportServerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BiOpers" EntityType="Self.BiOper" />
+          <EntitySet Name="BiUserOpers" EntityType="Self.BiUserOper" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_BiUserOpers_BiOpers" Association="Self.FK_BiUserOpers_BiOpers">
+            <End Role="BiOpers" EntitySet="BiOpers" />
+            <End Role="BiUserOpers" EntitySet="BiUserOpers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BiUserOpers_Users" Association="Self.FK_BiUserOpers_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="BiUserOpers" EntitySet="BiUserOpers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ReportServerModelStoreContainer" CdmEntityContainer="ReportServerEntities">
+          <EntitySetMapping Name="BiOpers">
+            <EntityTypeMapping TypeName="ReportServerModel.BiOper">
+              <MappingFragment StoreEntitySet="BiOpers">
+                <ScalarProperty Name="OperId" ColumnName="OperId" />
+                <ScalarProperty Name="OperType" ColumnName="OperType" />
+                <ScalarProperty Name="OperTypeName" ColumnName="OperTypeName" />
+                <ScalarProperty Name="OperTypeDesc" ColumnName="OperTypeDesc" />
+                <ScalarProperty Name="OperationName" ColumnName="OperationName" />
+                <ScalarProperty Name="OperationDesc" ColumnName="OperationDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BiUserOpers">
+            <EntityTypeMapping TypeName="ReportServerModel.BiUserOper">
+              <MappingFragment StoreEntitySet="BiUserOpers">
+                <ScalarProperty Name="RelationId" ColumnName="RelationId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="OperId" ColumnName="OperId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ReportServerModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Sid" ColumnName="Sid" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="AuthType" ColumnName="AuthType" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ServiceToken" ColumnName="ServiceToken" />
+                <ScalarProperty Name="Setting" ColumnName="Setting" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

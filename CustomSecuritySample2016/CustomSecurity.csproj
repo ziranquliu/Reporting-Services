@@ -98,12 +98,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal\EntityFramework.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\BISetup\PowerBI\Microsoft Power BI Report Server\PBIRS\Portal\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportingServices.Authorization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -152,6 +152,7 @@
       <Name>System.Management</Name>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web">
       <Name>System.Web</Name>
     </Reference>
@@ -164,6 +165,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commons\Consts.cs" />
+    <Compile Include="Data\BiOper.cs">
+      <DependentUpon>RSDbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\BiUserOper.cs">
+      <DependentUpon>RSDbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\RSDbEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RSDbEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\RSDbEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RSDbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\RSDbEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RSDbEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\User.cs">
+      <DependentUpon>RSDbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Enums\CatalogItemTypeEnum.cs" />
     <Compile Include="Enums\OperType.cs" />
     <Compile Include="Global.asax.cs">
@@ -172,10 +197,7 @@
     <Compile Include="Commons\HttpUtils.cs" />
     <Compile Include="Commons\NLogHelper.cs" />
     <Compile Include="Data\CepOneDbContext.cs" />
-    <Compile Include="Data\RSDbContext.cs" />
-    <Compile Include="Models\BiOper.cs" />
-    <Compile Include="Models\BiUserOper.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Data\ReportServerEntities.cs" />
     <Compile Include="RsSoapExtensionReflector.cs" />
     <Compile Include="Models\SessionInfo.cs" />
     <Compile Include="Models\SessionUser.cs" />
@@ -318,6 +340,16 @@
     </Compile>
     <Content Include="Catalog.sql" />
     <Content Include="CatalogTempDB.sql" />
+    <Content Include="Data\RSDbEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>RSDbEntities.Context.cs</LastGenOutput>
+      <DependentUpon>RSDbEntities.edmx</DependentUpon>
+    </Content>
+    <Content Include="Data\RSDbEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>RSDbEntities.edmx</DependentUpon>
+      <LastGenOutput>RSDbEntities.cs</LastGenOutput>
+    </Content>
     <Content Include="dlls\EntityFramework.dll" />
     <Content Include="dlls\EntityFramework.SqlServer.dll" />
     <Content Include="dlls\Microsoft.ReportingServices.Authorization.dll" />
@@ -358,6 +390,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <EntityDeploy Include="Data\RSDbEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>RSDbEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Data\RSDbEntities.edmx.diagram">
+      <DependentUpon>RSDbEntities.edmx</DependentUpon>
+    </None>
     <None Include="FormsAuth\RSPortal.exe.config" />
     <None Include="FormsAuth\rssrvpolicy.config" />
     <None Include="FormsAuth\web.config" />

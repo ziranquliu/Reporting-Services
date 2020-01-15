@@ -1,4 +1,4 @@
-#region
+Ôªø#region
 // Copyright (c) 2016 Microsoft Corporation. All Rights Reserved.
 // Licensed under the MIT License (MIT)
 /*============================================================================
@@ -36,6 +36,7 @@ using System.Linq;
 using NLog;
 using System.Web;
 using System.Security.Principal;
+using Microsoft.Samples.ReportingServices.CustomSecurity.Data;
 
 namespace Microsoft.Samples.ReportingServices.CustomSecurity
 {
@@ -45,19 +46,36 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
         private static readonly Logger logger = LogManager.GetCurrentClassLogger(typeof(AuthorizationExtension));
         private static readonly List<BiOper> BiOpers = new List<BiOper>();
         private static readonly List<BiUserOper> BiUserOpers = new List<BiUserOper>();
+        private static readonly List<User> BiUsers = new List<User>();
+        private static readonly System.Timers.Timer timer = new System.Timers.Timer(10000);
 
         static AuthorizationExtension()
         {
+            LoadAuthorization();
+            timer.Elapsed += Timer_Elapsed;
+            timer.Start();
+        }
+
+        private static void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
             try
             {
-                BiOpers = SqlHelper.DbRSInstance.BiOpers.AsQueryable().ToList();
-                BiUserOpers = SqlHelper.DbRSInstance.BiUserOpers.AsQueryable().ToList();
+                LoadAuthorization();
             }
             catch (Exception ex)
             {
-                logger.ErrorEx(new Exception("≥ı ºªØ»®œﬁ¡–±Ì ß∞‹£°", ex));
-                throw ex;
+                logger.ErrorEx(new Exception("ÂàùÂßãÂåñÊùÉÈôêÂàóË°®Â§±Ë¥•ÔºÅ", ex));
             }
+        }
+
+        private static void LoadAuthorization()
+        {
+            BiOpers.Clear();
+            BiOpers.AddRange(SqlHelper.DbRSInstance.BiOpers);
+            BiUserOpers.Clear();
+            BiUserOpers.AddRange(SqlHelper.DbRSInstance.BiUserOpers);
+            BiUsers.Clear();
+            BiUsers.AddRange(SqlHelper.DbRSInstance.Users);
         }
 
         /// <summary>
@@ -97,7 +115,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (IsAdmin(userName))
                 return true;
 
-            AceCollection acl = DeserializeAcl(secDesc);
+            AceCollection acl = DeserializeAcl(userName, secDesc);
             foreach (AceStruct ace in acl)
             {
                 // First check to see if the user or group has an access control 
@@ -133,7 +151,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (IsAdmin(userName))
                 return true;
 
-            AceCollection acl = DeserializeAcl(secDesc);
+            AceCollection acl = DeserializeAcl(userName, secDesc);
             foreach (AceStruct ace in acl)
             {
                 // First check to see if the user or group has an access control 
@@ -182,7 +200,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (IsAdmin(userName))
                 return true;
 
-            AceCollection acl = DeserializeAcl(secDesc);
+            AceCollection acl = DeserializeAcl(userName, secDesc);
             foreach (AceStruct ace in acl)
             {
                 // First check to see if the user or group has an access control 
@@ -230,7 +248,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (IsAdmin(userName))
                 return true;
 
-            AceCollection acl = DeserializeAcl(secDesc);
+            AceCollection acl = DeserializeAcl(userName, secDesc);
             foreach (AceStruct ace in acl)
             {
                 if (0 == String.Compare(userName, ace.PrincipalName, true,
@@ -258,7 +276,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (IsAdmin(userName))
                 return true;
 
-            AceCollection acl = DeserializeAcl(secDesc);
+            AceCollection acl = DeserializeAcl(userName, secDesc);
             foreach (AceStruct ace in acl)
             {
                 if (0 == String.Compare(userName, ace.PrincipalName, true,
@@ -302,7 +320,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (IsAdmin(userName))
                 return true;
 
-            AceCollection acl = DeserializeAcl(secDesc);
+            AceCollection acl = DeserializeAcl(userName, secDesc);
             foreach (AceStruct ace in acl)
             {
                 if (0 == String.Compare(userName, ace.PrincipalName, true,
@@ -350,7 +368,7 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
             if (IsAdmin(userName))
                 return true;
 
-            AceCollection acl = DeserializeAcl(secDesc);
+            AceCollection acl = DeserializeAcl(userName, secDesc);
             foreach (AceStruct ace in acl)
             {
                 if (0 == String.Compare(userName, ace.PrincipalName, true,
@@ -407,18 +425,61 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
 
         // Used to deserialize the ACL that is stored by the report server.
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        private AceCollection DeserializeAcl(byte[] secDesc)
+        private AceCollection DeserializeAcl(string userName, byte[] secDesc)
         {
             AceCollection acl = new AceCollection();
-            if (secDesc != null)
+            foreach (User user in BiUsers.Where(item => 0 == String.Compare(userName, item.UserName, true, CultureInfo.CurrentCulture)))
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                using (MemoryStream sdStream = new MemoryStream(secDesc))
+                if (user != null && user.BiUserOpers.Count > 0)
                 {
-                    acl = (AceCollection)bf.Deserialize(sdStream);
-                    string stringSecDesc = JsonConvert.SerializeObject(acl);
+                    AceStruct ace = new AceStruct(userName);
+                    ace.PrincipalName = userName;
+                    ace.CatalogOperations = new CatalogOperationsCollection();
+                    ace.DatasourceOperations = new DatasourceOperationsCollection();
+                    ace.FolderOperations = new FolderOperationsCollection();
+                    ace.ModelItemOperations = new ModelItemOperationsCollection();
+                    ace.ModelOperations = new ModelOperationsCollection();
+                    ace.ReportOperations = new ReportOperationsCollection();
+                    ace.ResourceOperations = new ResourceOperationsCollection();
+                    foreach (BiOper biOper in user.BiUserOpers.Select(item => item.BiOper))
+                    {
+                        switch ((OperType)biOper.OperType)
+                        {
+                            case OperType.CatalogOperation:
+                                ace.CatalogOperations.Add((CatalogOperation)Enum.Parse(typeof(CatalogOperation), biOper.OperTypeDesc));
+                                break;
+                            case OperType.DatasourceOperation:
+                                ace.DatasourceOperations.Add((DatasourceOperation)Enum.Parse(typeof(DatasourceOperation), biOper.OperTypeDesc));
+                                break;
+                            case OperType.FolderOperation:
+                                ace.FolderOperations.Add((FolderOperation)Enum.Parse(typeof(FolderOperation), biOper.OperTypeDesc));
+                                break;
+                            case OperType.ModelItemOperation:
+                                ace.ModelItemOperations.Add((ModelItemOperation)Enum.Parse(typeof(ModelItemOperation), biOper.OperTypeDesc));
+                                break;
+                            case OperType.ModelOperation:
+                                ace.ModelOperations.Add((ModelOperation)Enum.Parse(typeof(ModelOperation), biOper.OperTypeDesc));
+                                break;
+                            case OperType.ReportOperation:
+                                ace.ReportOperations.Add((ReportOperation)Enum.Parse(typeof(ReportOperation), biOper.OperTypeDesc));
+                                break;
+                            case OperType.ResourceOperation:
+                                ace.ResourceOperations.Add((ResourceOperation)Enum.Parse(typeof(ResourceOperation), biOper.OperTypeDesc));
+                                break;
+                        }
+                    }
+                    acl.Add(ace);
                 }
             }
+            //if (secDesc != null)
+            //{
+            //    BinaryFormatter bf = new BinaryFormatter();
+            //    using (MemoryStream sdStream = new MemoryStream(secDesc))
+            //    {
+            //        acl = (AceCollection)bf.Deserialize(sdStream);
+            //        string stringSecDesc = JsonConvert.SerializeObject(acl);
+            //    }
+            //}
             return acl;
         }
 

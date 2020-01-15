@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Samples.ReportingServices.CustomSecurity.Data;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -18,11 +19,11 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                 return CepOneDbContext.GetInstance().Database;
             }
         }
-        internal static RSDbContext DbRSInstance
+        internal static ReportServerEntities DbRSInstance
         {
             get
             {
-                return RSDbContext.GetInstance();
+                return ReportServerEntities.GetInstance();
             }
         }
 
