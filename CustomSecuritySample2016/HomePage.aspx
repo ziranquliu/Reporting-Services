@@ -33,7 +33,7 @@
             <input type="button" id="btnAddFolder" onclick="addFolder()" value="新增目录" />
             <br />
             <input type="file" id="upfile" onchange="upload1(this.files[0])" />
-            <div id="list"></div>
+            <div id="list"><img src="/Reports/assets/img/spinner.gif" /></div>
             <script type="text/javascript">
                 var rooturl = ref + "/catalogitems";
 
