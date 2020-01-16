@@ -131,16 +131,5 @@ namespace Microsoft.Samples.ReportingServices.CustomSecurity
                 return null;
             }
         }
-
-        protected void btnAddFolder_Click(object sender, EventArgs e)
-        {
-            CatalogItem ItemInfo = null;
-            Service2010.CreateFolder(this.tbFolder.Text.Trim('/', '\\'), "/", null, out ItemInfo);
-        }
-
-        protected void btnDelFolder_Click(object sender, EventArgs e)
-        {
-            Service2010.DeleteItem("/" + this.tbFolder.Text.Trim('/', '\\'));
-        }
     }
 }
