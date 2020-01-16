@@ -12,6 +12,16 @@
     <script type="text/javascript">
         var ref ="<%= Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery,"") %>"
     </script>
+    <style type="text/css">
+        dl{
+        }
+        dt{
+            margin-inline-start: 40px;
+        }
+        dd{
+
+        }
+  </style>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -20,29 +30,33 @@
             <asp:Button ID="btnAddFolder" runat="server" Text="新增目录" OnClick="btnAddFolder_Click" />
             <asp:Button ID="btnDelFolder" runat="server" Text="删除目录" OnClick="btnDelFolder_Click" />
             <br />
-            <dl id="list"></dl>
+            <div id="list"></div>
             <script type="text/javascript">
+                var rooturl = ref + "/Reports/api/v2.0/catalogitems";
                 $(function () {
-                    LoadRoot();
-                });
-
-                function LoadRoot() {
-                    var rootid = "3fd95dcb-16f2-4109-9706-c48fd6df35fc";
-                    var url = ref + "/Reports/api/v2.0/catalogitems(" + rootid + ")/Model.Folder/catalogitems/?$orderby=name%20ASC";
-                    $.get(url, function (data) {
+                    //LoadRoot();
+                    $.get(rooturl, function (data) {
                         $("#list").empty();
+                        debugger
                         for (index in data.value) {
-                            $("#list").append("<dt><span onclick=\"loadChild(this,'" + data.value[index].Id + "')\">" + data.value[index].Name + "</span><span onclick=\"Delete(this,'" + data.value[index].Id + "')\">删除</span></dt>");
+                            if (!data.value[index].ParentFolderId) {
+                                $("#list").append("<dl><span onclick=\"loadChild(this,'" + data.value[index].Id + "')\">" + data.value[index].Name + "</span>&nbsp;|&nbsp;<button onclick=\"Delete(this,'" + data.value[index].Id + "')\">删除</button></dl>");
+                            }
                         }
                     });
-                }
+                });
 
                 function loadChild(obj, id) {
                     var url = ref + "/Reports/api/v2.0/catalogitems(" + id + ")/Model.Folder/catalogitems/?$orderby=name%20ASC";
                     $.get(url, function (data) {
+                        $(obj).parent().find("dt").remove();
                         $(obj).parent().find("dd").remove();
                         for (index in data.value) {
-                            $(obj).parent().append("<dd><a href='javascript:void(0);' onclick=\"document.getElementById('frame').src='/reports/powerbi" + data.value[index].Path + "?rs:embed=true';\">" + data.value[index].Name + "</a></dd>");
+                            if (data.value[index].Type === "Folder") {
+                                $(obj).parent().append("<dt><span onclick=\"loadChild(this,'" + data.value[index].Id + "')\">" + data.value[index].Name + "</span>&nbsp;|&nbsp;<button onclick=\"Delete(this,'" + data.value[index].Id + "')\">删除</button></dt>");
+                            } else {
+                                $(obj).parent().append("<dd><a href='javascript:void(0);' onclick=\"document.getElementById('frame').src='/reports/powerbi" + data.value[index].Path + "?rs:embed=true';\">" + data.value[index].Name + "</a>&nbsp;|&nbsp;<button onclick=\"Delete(this,'" + data.value[index].Id + "')\">删除</button></dd>");
+                            }
                         }
                     });
                 }
