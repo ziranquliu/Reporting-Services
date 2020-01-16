@@ -9,8 +9,7 @@
     <link rel='icon' href="favicon.ico" />
     <script src="/powerbi/libs/scripts/jquery.js" type="text/javascript"></script>
     <script src="/powerbi/libs/scripts/angular.js" type="text/javascript"></script>
-    <script src="/Reports/assets/js/oauth.js"></script>
-    <script src="/Reports/assets/js/app-443dcad0-751c-4017-ab6c-ae6cac983fd6.js"></script>
+    <script src="/powerbi/libs/scripts/require.js" type="text/javascript"></script>
     <script type="text/javascript">
         var ref = "<%= Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery,"") %>/Reports/api/v2.0";
     </script>
@@ -35,8 +34,35 @@
             <input type="file" id="upfile" onchange="upload1(this.files[0])" />
             <div id="list"><img src="/Reports/assets/img/spinner.gif" /></div>
             <script type="text/javascript">
-                var rooturl = ref + "/catalogitems";
+                var rooturl = ref + "/CatalogItems";
+                require.config({
+                    baseUrl: "./scripts/pbirs/src",
+                    paths: {
+                        'pbirs': "index"
+                    }
 
+                });
+                require(['pbirs'], function (res) {
+                    //console.dir(res)
+                    var cataLogItem = new res.CatalogItemsApi()
+                    var opts = {};
+                    //opts.top = 56;
+                    //opts.skip = 56;
+                    //opts.filter = "filter_example";
+                    //opts.count = "count_example";
+                    //opts.orderBy = "orderBy_example";
+                    //opts.select = "select_example";
+                    cataLogItem.getCatalogItems(opts, function (error, data, response) {
+                        $("#list").empty();
+                        for (index in data.value) {
+                            var obj = data.value[index];
+                            if (!obj.parentFolderId) {
+                                $("#list").append("<dl><span onclick=\"loadChild(this,'" + obj.id + "')\">" + obj.name
+                                    + "</span>&nbsp;|&nbsp;<button onclick=\"Delete(this,'" + obj.id + "')\">删除</button></dl>");
+                            }
+                        }
+                    });
+                })
                 function addFolder() {
                     if ($("#tbfolder").val()) {
                         $.ajax({
@@ -88,18 +114,6 @@
                         });
                     }
                 }
-
-                $(function () {
-                    //LoadRoot();
-                    $.get(rooturl, function (data) {
-                        $("#list").empty();
-                        for (index in data.value) {
-                            if (!data.value[index].ParentFolderId) {
-                                $("#list").append("<dl><span onclick=\"loadChild(this,'" + data.value[index].Id + "')\">" + data.value[index].Name + "</span>&nbsp;|&nbsp;<button onclick=\"Delete(this,'" + data.value[index].Id + "')\">删除</button></dl>");
-                            }
-                        }
-                    });
-                });
 
                 function loadChild(obj, id) {
                     var url = ref + "/catalogitems(" + id + ")/Model.Folder/catalogitems/?$orderby=name%20ASC";

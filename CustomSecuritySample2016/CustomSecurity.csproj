@@ -1045,6 +1045,8 @@
     <Content Include="scripts\pbirs\src\model\ValidValue.js" />
     <Content Include="scripts\pbirs\src\model\WeeklyRecurrence.js" />
     <Content Include="scripts\pbirs\src\model\WeekNumberEnum.js" />
+    <Content Include="scripts\pbirs\src\querystring.js" />
+    <Content Include="scripts\pbirs\src\superagent.js" />
     <Content Include="scripts\pbirs\test\api\CacheRefreshPlansApi.spec.js" />
     <Content Include="scripts\pbirs\test\api\CatalogItemsApi.spec.js" />
     <Content Include="scripts\pbirs\test\api\DataSetsApi.spec.js" />
