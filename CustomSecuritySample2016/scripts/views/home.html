@@ -1,0 +1,16 @@
+﻿<div style="width: 40%; float: left; border-right: 1px dotted; overflow-y: scroll; height: 550px;">
+    <div ng-controller="folderCtrl">
+        <input ng-model="newname"><button ng-click="add()">新增目录</button>
+    </div>
+    <br />
+    <input type="file" id="upfile" onchange="upload1(this.files[0])" />
+    <div id="list" ng-controller="CatalogItems">
+        <img src="/Reports/assets/img/spinner.gif" />
+    </div>
+</div>
+<div style="left: 41%; width: 60%; float: right; z-index: 9999; position: fixed ! important;">
+    <iframe id="frame" style="width: 97%; height: 550px; border: 1px solid gray;"></iframe>
+</div>
+<!-- <div style="right: 10px; bottom: 5px; position: absolute;">
+    <a href="javascript:void(0);" onclick="window.document.location.href='logout?redirect_login=true'">退出</a>
+</div> -->
